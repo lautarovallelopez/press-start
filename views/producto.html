@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Producto Mardant | Producto anime oficial en Perú</title>
+  <meta name="description" content="Consulta el detalle de productos anime oficiales en Mardant Perú. Compra, cotiza o comparte figuras, peluches, acrílicos y coleccionables importados desde Japón.">
+  <link rel="canonical" href="https://mardant.com/views/producto.html">
+  <meta property="og:title" content="Producto Mardant | Producto anime oficial en Perú">
+  <meta property="og:description" content="Consulta el detalle de productos anime oficiales en Mardant Perú. Compra, cotiza o comparte figuras, peluches, acrílicos y coleccionables importados desde Japón.">
+  <meta property="og:type" content="product">
+  <meta property="og:url" content="https://mardant.com/views/producto.html">
+  <meta property="og:image" content="https://i.imgur.com/wfOe9n4.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Producto Mardant | Producto anime oficial en Perú">
+  <meta name="twitter:description" content="Consulta el detalle de productos anime oficiales en Mardant Perú. Compra, cotiza o comparte figuras, peluches, acrílicos y coleccionables importados desde Japón.">
+  <meta name="twitter:image" content="https://i.imgur.com/wfOe9n4.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="../css/estilos.css?v=17">
+  <link rel="stylesheet" href="../css/producto.css?v=11">
+</head>
+<body>
+
+  <div class="pdp-wrap">
+    <div class="pdp-top">
+      <a class="pdp-back" href="./catalogo.html">← Volver al catálogo</a>
+    </div>
+
+    <div id="pdp-error" class="pdp-error" style="display:none;"></div>
+
+    <div id="pdp" class="pdp" style="display:none;">
+      <div class="pdp-grid">
+        <div class="pdp-media">
+          <img id="pdp-img" class="pdp-img" alt="">
+        </div>
+
+        <div class="pdp-info">
+          <div class="pdp-badges">
+            <span id="pdp-estado" class="pdp-badge"></span>
+            <span id="pdp-id" class="pdp-badge pdp-badge-muted"></span>
+          </div>
+
+          <h1 id="pdp-nombre" class="pdp-title"></h1>
+
+          <div id="pdp-precio" class="pdp-precio"></div>
+
+          <div class="pdp-actions">
+            <button id="pdp-add" class="boton">🛒 Añadir al carrito</button>
+            <button id="pdp-copy" class="boton pdp-btn-sec">🔗 Copiar link</button>
+            <a id="pdp-wa" class="boton pdp-btn-wa" href="#" target="_blank" rel="noopener noreferrer">💬 Pedir por WhatsApp</a>
+          </div>
+
+          <div class="pdp-meta">
+            <div><strong>Categoría:</strong> <span id="pdp-cat">-</span></div>
+            <div><strong>Subcategoría:</strong> <span id="pdp-sub">-</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón flotante carrito + mini-carrito -->
+  <a class="boton-carrito-flotante" href="./carrito.html" aria-label="Ir al carrito">
+    🛒 <span id="contador-carrito" class="contador-carrito"></span>
+  </a>
+  <div id="mini-carrito" class="mini-carrito"></div>
+
+  <script type="module" src="../js/producto.js?v=7"></script>
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!-- views/como.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cómo comprar en Mardant Perú | Guía de compra anime</title>
+  <meta name="description" content="Aprende cómo comprar en Mardant Perú: explora el catálogo, añade productos al carrito y finaliza tu pedido por WhatsApp.">
+  <link rel="canonical" href="https://mardant.com/views/como.html">
+  <meta property="og:title" content="Cómo comprar en Mardant Perú | Guía de compra anime">
+  <meta property="og:description" content="Aprende cómo comprar en Mardant Perú: explora el catálogo, añade productos al carrito y finaliza tu pedido por WhatsApp.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mardant.com/views/como.html">
+  <meta property="og:image" content="https://i.imgur.com/wfOe9n4.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cómo comprar en Mardant Perú | Guía de compra anime">
+  <meta name="twitter:description" content="Aprende cómo comprar en Mardant Perú: explora el catálogo, añade productos al carrito y finaliza tu pedido por WhatsApp.">
+  <meta name="twitter:image" content="https://i.imgur.com/wfOe9n4.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+
+  <!-- hoja de estilos unificada -->
+  <link rel="stylesheet" href="../css/estilos.css?v=17" />
+
+  <!-- ajustes ligeros propios de esta vista -->
+  <style>
+    /* CTA con botones tipo “píldora”, coherentes con Preventa/Pedidos/Contacto */
+    .cta-como{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:14px;
+      margin: 10px auto 28px;
+      padding: 0 12px;
+    }
+    .btn-pill{
+      display:inline-flex; align-items:center; gap:10px;
+      color:#fff; font-weight:800; line-height:1;
+      padding:14px 22px;
+      border-radius:9999px;
+      text-decoration:none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)),
+        #a8322a;
+      box-shadow:0 10px 24px rgba(168,50,42,.22);
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-pill:hover{ transform:translateY(-1px); box-shadow:0 14px 28px rgba(23,20,17,.28); filter:saturate(1.03); }
+    .btn-pill.alt{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)),
+        #171411;
+      box-shadow:0 10px 24px rgba(23,20,17,.24);
+    }
+
+    /* micro-ajustes de tipografía para los pasos */
+    .paso h2{ font-size:1.15rem; margin:12px 0 6px; }
+    .paso p { margin:0; }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">Cómo comprar en Mardant Perú</h1>
+
+  <!-- Título -->
+  <div class="contacto-centro">
+    <h2 class="titulo-seccion">Cómo Comprar</h2>
+  </div>
+
+  <!-- Pasos de la guía -->
+  <div class="contenedor-guia">
+    <div class="paso">
+      <img src="https://i.imgur.com/0apS5FN.png" alt="Paso 1: Explora el catálogo" referrerpolicy="no-referrer" />
+      <h2>1. Explora todo nuestro catálogo</h2>
+      <p>Entra a “Catálogo” o “Productos a Pedido” para ver figuras, peluches, accesorios y más. ¡Todo 100 % original desde Japón!</p>
+    </div>
+
+    <div class="paso">
+      <img src="https://i.imgur.com/U40x9Da.png" alt="Paso 2: Busca tu personaje" referrerpolicy="no-referrer" />
+      <h2>2. Busca tu anime o personaje favorito</h2>
+      <p>Usa el buscador o filtra por categorías como Pokémon, Naruto o Jujutsu Kaisen. Añade lo que te guste al carrito.</p>
+    </div>
+
+    <div class="paso">
+      <img src="https://i.imgur.com/254fLYY.png" alt="Paso 3: Finaliza por WhatsApp" referrerpolicy="no-referrer" />
+      <h2>3. Finaliza tu compra por WhatsApp</h2>
+      <p>Toca el carrito (abajo a la derecha) y pulsa <em>“Finalizar compra por WhatsApp”</em>. ¡Te atendemos al toque!</p>
+    </div>
+  </div>
+
+  <!-- CTAs -->
+  <div class="cta-como">
+    <a href="catalogo.html" class="btn-pill alt">🛍️ <span>Ver catálogo</span></a>
+    <a href="../index.html" class="btn-pill">🏠 <span>Volver al inicio</span></a>
+  </div>
+
+  <!-- Carrito flotante -->
+  <a href="carrito.html" class="boton-carrito-flotante" title="Ver carrito 🛒">🛒</a>
+
+  <!-- Tracking (GA4 + eventos) -->
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>

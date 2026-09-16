@@ -1,0 +1,356 @@
+<!-- views/catalogo.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Catálogo Mardant | Figuras, peluches y productos anime en Perú</title>
+  <meta name="description" content="Explora el catálogo de Mardant Perú con figuras, peluches, llaveros, acrílicos y mercancía oficial de anime disponible para compra.">
+  <link rel="canonical" href="https://mardant.com/views/catalogo.html">
+  <meta property="og:title" content="Catálogo Mardant | Figuras, peluches y productos anime en Perú">
+  <meta property="og:description" content="Explora el catálogo de Mardant Perú con figuras, peluches, llaveros, acrílicos y mercancía oficial de anime disponible para compra.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mardant.com/views/catalogo.html">
+  <meta property="og:image" content="https://i.imgur.com/K7nyK2A.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Catálogo Mardant | Figuras, peluches y productos anime en Perú">
+  <meta name="twitter:description" content="Explora el catálogo de Mardant Perú con figuras, peluches, llaveros, acrílicos y mercancía oficial de anime disponible para compra.">
+  <meta name="twitter:image" content="https://i.imgur.com/K7nyK2A.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+
+  <!-- estilos globales -->
+  <link rel="stylesheet" href="../css/estilos.css?v=19" />
+  <!-- extras del catálogo -->
+  <link rel="stylesheet" href="../css/catalogo.css?v=12" />
+
+  <style>
+    /* ====== AJUSTES LOCALES (sólo esta vista) ====== */
+
+    /* Evita cualquier scroll horizontal fantasma */
+    html, body { overflow-x: hidden; }
+
+    /* Contenedor central con respiración lateral en todo el flujo */
+    .page-wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* CTA superior en píldoras (sin “pastilla” de fondo detrás) */
+    .cta-catalogo{
+      display:flex; justify-content:center; flex-wrap:wrap; gap:14px;
+      margin: 12px auto 16px;
+      padding: 0;
+      background: none !important;
+      box-shadow: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      position: relative;
+    }
+    .cta-catalogo::before,
+    .cta-catalogo::after{ content:none !important; }
+
+    .btn-pill{
+      display:inline-flex; align-items:center; gap:10px;
+      color:#fff; font-weight:800; line-height:1;
+      padding:14px 22px;
+      border-radius:9999px;
+      text-decoration:none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)),
+        #a8322a;
+      box-shadow:0 10px 24px rgba(168,50,42,.22);
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-pill:hover{ transform:translateY(-1px); box-shadow:0 14px 28px rgba(23,20,17,.28); filter:saturate(1.03); }
+    .btn-pill.alt{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)),
+        #171411;
+      box-shadow:0 10px 24px rgba(23,20,17,.24);
+    }
+    .btn-pill.japan{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)),
+        #6f2b26;
+      border:1px solid rgba(244,208,111,.28);
+      box-shadow:0 10px 24px rgba(111,43,38,.22);
+    }
+
+    /* Buscador centrado con aire vertical */
+    #buscador{ margin: 6px auto 0; }
+
+    /* Cursor de zoom sobre imágenes del listado (para abrir lightbox) */
+    #contenedor img{ cursor: zoom-in; }
+
+    /* Lightbox (igual al de preventa/pedidos) */
+    .lightbox{
+      position:fixed; inset:0; background:rgba(0,0,0,.92);
+      display:flex; align-items:center; justify-content:center;
+      z-index:10000; padding:16px;
+    }
+    .lightbox[hidden]{ display:none !important; }
+    .lightbox img{
+      max-width:94vw; max-height:88vh; border-radius:12px;
+      box-shadow:0 20px 40px rgba(0,0,0,.5);
+    }
+    .lb-close{
+      position:absolute; top:10px; right:14px;
+      background:transparent; border:none; color:#fff;
+      font-size:36px; line-height:1; cursor:pointer; opacity:.9;
+    }
+    .lb-close:hover{ opacity:1; }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width:680px){
+      .page-wrap{ padding: 0 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="sr-only">Catálogo Mardant Perú de figuras, peluches y productos anime</h1>
+
+  <!-- Banner superior -->
+  <img src="https://i.imgur.com/K7nyK2A.png"
+       alt="Catálogo Mardant"
+       style="width:100%;max-height:200px;object-fit:cover;border-bottom:3px solid #a8322a" referrerpolicy="no-referrer" />
+
+  <div class="page-wrap"><!-- abre contenedor central -->
+
+    <!-- CTA superior -->
+    <div class="cta-catalogo">
+      <a href="./inicio.html" class="btn-pill">🏠 <span>Volver al inicio</span></a>
+      <a href="./preventa.html" class="btn-pill alt">📦 <span>Ver preventas</span></a>
+      <a href="./catalogo-japon.html" class="btn-pill japan"><span>日本</span><span>Catálogo Japón</span></a>
+    </div>
+
+    <!-- Buscador -->
+    <input id="buscador" type="text" placeholder="Buscar producto…" autocomplete="off" />
+
+    <!-- Filtros de Categoría -->
+    <div class="filtros" id="filtros">
+      <div id="filtro-categorias" class="grupo-filtro">
+        <button type="button" class="categoria-imagen" data-categoria="">
+          <img src="https://i.imgur.com/gy6LkfG.png" alt="Todos" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="POKEMON">
+          <img src="https://i.imgur.com/z7fPTus.png" alt="Pokemon" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="MY HERO ACADEMIA">
+          <img src="https://i.imgur.com/PB85qrv.png" alt="My Hero Academia" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="DRAGON BALL">
+          <img src="https://i.imgur.com/UUtpYIJ.png" alt="Dragon Ball" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="JUJUTSU KAISEN">
+          <img src="https://i.imgur.com/WklTLco.png" alt="Jujutsu Kaisen" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="DEMON SLAYER">
+          <img src="https://i.imgur.com/4teP5Jy.png" alt="Demon Slayer" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="SAILOR MOON">
+          <img src="https://i.imgur.com/BbxtzzD.png" alt="Sailor Moon" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="DR. STONE">
+          <img src="https://i.imgur.com/4gX4Ews.png" alt="Dr. Stone" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="KAIJU NO 8">
+          <img src="https://i.imgur.com/VQdQJAa.png" alt="Kaiju no 8" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="NARUTO">
+          <img src="https://i.imgur.com/UXZCDIm.png" alt="Naruto" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="ONE PIECE">
+          <img src="https://i.imgur.com/phbUt2h.png" alt="One Piece" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="OVERLORD">
+          <img src="https://i.imgur.com/imABoHo.png" alt="Overlord" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="THAT TIME I GOT REINCARNATED AS A SLIME">
+          <img src="https://i.imgur.com/q0Ya6vQ.png" alt="That time i got reincarnated as a slime" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="TOKYO REVENGERS">
+          <img src="https://i.imgur.com/uDP1bDn.png" alt="Tokyo revengers" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="GUNDAM">
+          <img src="https://i.imgur.com/eV0ZYQm.png" alt="Gundam" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="SPY X FAMILY">
+          <img src="https://i.imgur.com/QLyUTVz.png" alt="Spy x Family" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="HATSUNE MIKU">
+          <img src="https://i.imgur.com/TVdbddi.png" alt="Hatsune miku" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="SAKAMOTO DAYS">
+          <img src="https://i.imgur.com/Ac5PiXg.png" alt="Sakamoto Days" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="THE APOTHECARY DIARIES">
+          <img src="https://i.imgur.com/ZPADHps.png" alt="The Apothecary Diaries" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="UMAMUSUME">
+          <img src="https://i.imgur.com/A92haES.png" alt="Umamusume" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="LOVE LIVE">
+          <img src="https://i.imgur.com/AWmcCZW.png" alt="Love Live" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="BANG DREAM">
+          <img src="https://i.imgur.com/furYIdH.png" alt="Bang Dream" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="I MAY BE A GUILD RECEPTIONIST">
+          <img src="https://i.imgur.com/lI0g7Xd.png" alt="I may be a guild receptionist" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="SHIRONEKO PROJECT">
+          <img src="https://i.imgur.com/MUI917T.png" alt="Shironeko Project" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="RUROUNI KENSHIN">
+          <img src="https://i.imgur.com/tP4ijnm.png" alt="Rurouni Kenshin" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="YU-GI-OH">
+          <img src="https://i.imgur.com/dF9G2bR.png" alt="YU-GI-OH" height="60" referrerpolicy="no-referrer">
+        </button>
+        <button type="button" class="categoria-imagen" data-categoria="RE ZERO">
+          <img src="https://i.imgur.com/vaHDYor.png" alt="Re Zero" height="60" referrerpolicy="no-referrer">
+        </button>
+          <button type="button" class="categoria-imagen" data-categoria="NIKKE">
+          <img src="https://i.imgur.com/xH5JrqZ.png" alt="NIKKE" height="60" referrerpolicy="no-referrer">
+        </button>
+          <button type="button" class="categoria-imagen" data-categoria="OSHI NO KO">
+          <img src="https://i.imgur.com/aAZMAJN.png" alt="OSHI NO KO" height="60" referrerpolicy="no-referrer">
+        </button>       
+          <button type="button" class="categoria-imagen" data-categoria="LYCORIS RECOIL">
+          <img src="https://i.imgur.com/q8zgSkW.png" alt="LYCORIS RECOIL" height="60" referrerpolicy="no-referrer">
+        </button>
+          <button type="button" class="categoria-imagen" data-categoria="BERSERK">
+          <img src="https://i.imgur.com/6yCqiRm.png" alt="BERSERK" height="60" referrerpolicy="no-referrer">
+        </button>  
+          <button type="button" class="categoria-imagen" data-categoria="DIGIMON">
+          <img src="https://i.imgur.com/m8A4SZU.png" alt="DIGIMON" height="60" referrerpolicy="no-referrer">
+        </button>  
+          <button type="button" class="categoria-imagen" data-categoria="DANDADAN">
+          <img src="https://i.imgur.com/ByVPUre.png" alt="DANDADAN" height="60" referrerpolicy="no-referrer">
+        </button> 
+          <button type="button" class="categoria-imagen" data-categoria="EVANGELION">
+          <img src="https://i.imgur.com/q1UpVyT.png" alt="EVANGELION" height="60" referrerpolicy="no-referrer">
+        </button> 
+          <button type="button" class="categoria-imagen" data-categoria="DC COMICS">
+          <img src="https://i.imgur.com/PtnUOZx.png" alt="DC COMICS" height="60" referrerpolicy="no-referrer">
+        </button>
+        </button> 
+          <button type="button" class="categoria-imagen" data-categoria="FRIEREN">
+          <img src="https://i.imgur.com/3FSm0jI.png" alt="FRIEREN" height="60" referrerpolicy="no-referrer">
+        </button>
+        </button> 
+          <button type="button" class="categoria-imagen" data-categoria="MUSHOKU TENSEI">
+          <img src="https://i.imgur.com/EEo93s1.png" alt="MUSHOKU TENSEI" height="60" referrerpolicy="no-referrer">
+        </button>
+        </button> 
+          <button type="button" class="categoria-imagen" data-categoria="NIER AUTOMATA">
+          <img src="https://i.imgur.com/lszCd8F.png" alt="NIER AUTOMATA" height="60" referrerpolicy="no-referrer">
+        </button>
+      </div>
+    </div>
+
+    <!-- Sub-categorías (JS las pinta aquí) -->
+    <div id="subfiltro-contenedor"></div>
+
+    <!-- Orden / disponibilidad -->
+    <div class="orden">
+      <label class="catalog-filter-field" for="orden">
+        <span>Ordenar</span>
+        <select id="orden">
+          <option value="recientes">Lo más nuevo</option>
+          <option value="default">Por defecto</option>
+          <option value="oferta">Sólo ofertas</option>
+          <option value="precio-asc">Precio menor a mayor</option>
+          <option value="precio-desc">Precio mayor a menor</option>
+          <option value="nombre-az">Nombre A-Z</option>
+          <option value="nombre-za">Nombre Z-A</option>
+        </select>
+      </label>
+
+      <label class="catalog-filter-field" for="estado">
+        <span>Disponibilidad</span>
+        <select id="estado">
+          <option value="todos">Todos</option>
+          <option value="disponible">Sólo disponibles</option>
+          <option value="agotado">Sólo agotados</option>
+        </select>
+      </label>
+
+      <label class="catalog-filter-field" for="precio-min">
+        <span>Precio mín.</span>
+        <input id="precio-min" class="precio-filter-input" type="number" min="0" step="1" inputmode="numeric" placeholder="1">
+      </label>
+
+      <label class="catalog-filter-field" for="precio-max">
+        <span>Precio máx.</span>
+        <input id="precio-max" class="precio-filter-input" type="number" min="0" step="1" inputmode="numeric" placeholder="100">
+      </label>
+
+      <button id="limpiar-precio" class="precio-filter-clear" type="button">Limpiar precio</button>
+    </div>
+
+    <!-- Productos + paginación -->
+    <div id="contenedor" class="grid"></div>
+    <div id="paginacion" class="catalog-pagination" aria-label="Paginas del catalogo"></div>
+
+    <!-- Mini-carrito + contador -->
+    <div class="carrito-contenedor">
+      <a href="./carrito.html" class="boton-carrito-flotante" title="Ver carrito 🛒">
+        🛒<span id="contador-carrito" class="contador-carrito">0</span>
+      </a>
+      <div id="mini-carrito" class="mini-carrito"></div>
+    </div>
+
+    <!-- Notificación flotante -->
+    <div id="notificacion-carrito" class="noti-carrito">✅ Producto añadido al carrito</div>
+
+  </div><!-- /page-wrap -->
+
+  <!-- Lightbox -->
+  <div id="lb" class="lightbox" hidden>
+    <img alt="Vista ampliada">
+    <button class="lb-close" aria-label="Cerrar">×</button>
+  </div>
+
+  <!-- Lógica del catálogo -->
+  <script type="module" src="../js/catalogo.js?v=16"></script>
+
+  <!-- Abrir imágenes del listado en el lightbox -->
+  <script>
+    (function () {
+      const cont = document.getElementById('contenedor');
+      const lb   = document.getElementById('lb');
+      const img  = lb.querySelector('img');
+
+      cont.addEventListener('click', (e) => {
+        const el = e.target;
+        if (el && el.tagName === 'IMG') {
+          img.src = el.src;
+          lb.hidden = false;
+          document.body.style.overflow = 'hidden';
+        }
+      });
+
+      const close = () => {
+        lb.hidden = true;
+        img.src = '';
+        document.body.style.overflow = '';
+      };
+      lb.addEventListener('click', close);
+      lb.querySelector('.lb-close').addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        close();
+      });
+      document.addEventListener('keydown', (ev) => {
+        if (!lb.hidden && ev.key === 'Escape') close();
+      });
+    })();
+  </script>
+
+  <!-- Tracking -->
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>

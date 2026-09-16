@@ -1,0 +1,251 @@
+<!-- views/preventa.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preventas Mardant | Reserva productos anime desde S/ 15</title>
+  <meta name="description" content="Reserva productos oficiales de anime antes de su llegada a Perú. Preventas disponibles con reserva desde S/ 15.">
+  <link rel="canonical" href="https://mardant.com/views/preventa.html">
+  <meta property="og:title" content="Preventas Mardant | Reserva productos anime desde S/ 15">
+  <meta property="og:description" content="Reserva productos oficiales de anime antes de su llegada a Perú. Preventas disponibles con reserva desde S/ 15.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mardant.com/views/preventa.html">
+  <meta property="og:image" content="https://i.imgur.com/ZMGeepN.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Preventas Mardant | Reserva productos anime desde S/ 15">
+  <meta name="twitter:description" content="Reserva productos oficiales de anime antes de su llegada a Perú. Preventas disponibles con reserva desde S/ 15.">
+  <meta name="twitter:image" content="https://i.imgur.com/ZMGeepN.png">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+
+  <!-- hoja de estilos global -->
+  <link rel="stylesheet" href="../css/estilos.css?v=18" />
+
+  <style>
+    /* ====== AJUSTES LOCALES SOLO PARA ESTA VISTA ====== */
+    html, body { overflow-x: hidden; }   /* evita “borde blanco” lateral */
+
+    :root{
+      --card-max-mobile: 380px;          /* ancho máx de una card en móvil */
+      --pill-radius: 9999px;             /* cápsulas redondeadas */
+    }
+
+    /* Botones “píldora” (coherentes con otras vistas) */
+    .btn-pill{
+      display:inline-flex; align-items:center; gap:10px;
+      color:#fff; font-weight:800; line-height:1;
+      padding:14px 22px;
+      border-radius: var(--pill-radius);
+      text-decoration:none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)) ,
+        #a8322a;
+      box-shadow:0 10px 24px rgba(168,50,42,.22);
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn-pill:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 28px rgba(23,20,17,.28);
+      filter:saturate(1.03);
+    }
+    .btn-pill.alt{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)) ,
+        #171411;
+      box-shadow:0 10px 24px rgba(23,20,17,.24);
+    }
+    .btn-pill.japan{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0)) ,
+        #6f2b26;
+      border:1px solid rgba(244,208,111,.28);
+      box-shadow:0 10px 24px rgba(111,43,38,.22);
+    }
+
+    .titulo-seccion{ color:#171411; }
+    .titulo-seccion::after{ background:#a8322a; }
+
+    /* Contenedor de los botones – sin fondo detrás */
+    .cta-preventa{
+      display:flex; justify-content:center; flex-wrap:wrap; gap:14px;
+      margin: 12px auto 30px;
+      padding: 0 12px;
+      background: none !important;
+      box-shadow: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      position: relative;
+    }
+    .cta-preventa::before,.cta-preventa::after{ content:none !important; }
+
+    /* Grid propio de preventa (estable y centrado) */
+    .grid-preventa{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap:28px;
+      max-width:1200px;
+      margin:0 auto 60px;
+      padding:0 16px;                      /* respiración lateral */
+      box-sizing:border-box;
+    }
+    .grid-preventa .producto{
+      width:100%;
+      padding-bottom:22px;                 /* MÁS ESPACIO bajo el CTA */
+    }
+
+    /* Imágenes SIEMPRE sin recortes */
+    .grid-preventa .producto img{
+      display:block !important;
+      width:100% !important;
+      max-width:100% !important;
+      height:auto !important;
+      object-fit:contain !important;
+      border-radius:10px;
+      cursor: zoom-in;                     /* pista del lightbox */
+    }
+
+    /* Extra de margen para botones de reserva/whatsapp dentro de la card */
+    .grid-preventa .producto .agregar-carrito,
+    .grid-preventa .producto a.boton,
+    .grid-preventa .producto a[href*="whatsapp"],
+    .grid-preventa .producto a[href*="wa.me"],
+    .grid-preventa .producto a[href*="reserv"],
+    .grid-preventa .producto button{
+      display:block;
+      margin-bottom:10px;
+    }
+    .grid-preventa .producto a.boton{
+      background:linear-gradient(180deg, #b13a31, #8f2722);
+      border:1px solid rgba(244,208,111,.30);
+      border-radius:8px;
+      color:#fff;
+      font-weight:900;
+      letter-spacing:.04em;
+      box-shadow:0 8px 18px rgba(0,0,0,.22);
+    }
+    .grid-preventa .producto a.boton:hover{
+      background:linear-gradient(180deg, #c04438, #982b25);
+      transform:translateY(-1px);
+      box-shadow:0 12px 24px rgba(0,0,0,.28);
+    }
+    .grid-preventa .producto .estado{
+      color:#d7c8ae;
+      font-weight:900;
+    }
+
+    /* --------- Responsivo --------- */
+    @media (max-width:1100px){
+      .grid-preventa{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+    }
+    @media (max-width:720px){
+      .grid-preventa{ grid-template-columns: 1fr; gap:18px; }
+      .grid-preventa .producto{
+        max-width: var(--card-max-mobile);
+        margin: 0 auto;                    /* centra la card en móvil */
+        padding-bottom:26px;               /* un poquito más en móvil */
+      }
+      .cta-preventa{ margin-bottom: 22px; gap:10px; }
+    }
+
+    /* ------- Lightbox ------- */
+    .lightbox{
+      position:fixed; inset:0; background:rgba(0,0,0,.92);
+      display:flex; align-items:center; justify-content:center;
+      z-index:10000; padding:16px;
+    }
+    .lightbox[hidden]{ display:none !important; }
+    .lightbox img{
+      max-width:94vw; max-height:88vh; border-radius:12px;
+      box-shadow:0 20px 40px rgba(0,0,0,.5);
+    }
+    .lb-close{
+      position:absolute; top:10px; right:14px;
+      background:transparent; border:none; color:#fff;
+      font-size:36px; line-height:1; cursor:pointer; opacity:.9;
+    }
+    .lb-close:hover{ opacity:1; }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">Preventas Mardant Perú de productos anime oficiales</h1>
+
+  <!-- Banner superior -->
+  <img src="https://i.imgur.com/ZMGeepN.png"
+       alt="Preventa Mardant"
+       style="width:100%;max-height:200px;object-fit:cover;border-bottom:3px solid #a8322a;" referrerpolicy="no-referrer" />
+
+  <!-- Título -->
+  <div class="contacto-centro">
+    <h2 class="titulo-seccion">Productos en Preventa</h2>
+  </div>
+
+  <!-- Botones superiores -->
+  <div class="cta-preventa">
+    <a href="../index.html" class="btn-pill">
+      🏠 <span>Volver al inicio</span>
+    </a>
+    <a href="catalogo.html" class="btn-pill alt">
+      🛍️ <span>Ir al catálogo</span>
+    </a>
+    <a href="catalogo-japon.html" class="btn-pill japan">
+      <span>日本</span><span>Catálogo Japón</span>
+    </a>
+  </div>
+
+  <!-- Contenedor de productos -->
+  <div id="contenedor" class="grid-preventa">
+    <p style="text-align:center;width:100%;">Cargando productos…</p>
+  </div>
+  <div id="paginacion" class="paginacion catalog-pagination" aria-label="Paginas de preventas"></div>
+
+  <!-- Carrito flotante -->
+  <a href="carrito.html"
+     class="boton-carrito-flotante"
+     title="Ver carrito 🛒"
+     data-vista="carrito">🛒</a>
+
+  <!-- ========== Lightbox (overlay) ========== -->
+  <div id="lb" class="lightbox" hidden>
+    <img alt="Vista ampliada">
+    <button class="lb-close" aria-label="Cerrar">×</button>
+  </div>
+
+  <!-- Lógica de la página -->
+  <script type="module" src="../js/preventa.js?v=11"></script>
+
+  <!-- Lightbox: abrir al tocar cualquier imagen -->
+  <script>
+    (function () {
+      const cont = document.getElementById('contenedor');
+      const lb   = document.getElementById('lb');
+      const img  = lb.querySelector('img');
+
+      cont.addEventListener('click', (e) => {
+        const el = e.target;
+        if (el && el.tagName === 'IMG') {
+          img.src = el.src;
+          lb.hidden = false;
+          document.body.style.overflow = 'hidden';
+        }
+      });
+      const close = () => {
+        lb.hidden = true;
+        img.src = '';
+        document.body.style.overflow = '';
+      };
+      lb.addEventListener('click', close);
+      lb.querySelector('.lb-close').addEventListener('click', (ev) => {
+        ev.stopPropagation(); close();
+      });
+      document.addEventListener('keydown', (ev) => {
+        if (!lb.hidden && ev.key === 'Escape') close();
+      });
+    })();
+  </script>
+
+  <!-- Tracking (GA4 + eventos) -->
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>
+

@@ -1,0 +1,173 @@
+<!-- views/carrito.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Carrito - Mardant</title>
+  <!-- favicon -->
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="../css/estilos.css?v=17">
+</head>
+<body>
+  <div class="carrito-container">
+    <h1>🛒 Mi Carrito</h1>
+    <div id="lista-carrito"></div>
+    <div class="total" id="total-carrito">Total: S/. 0.00</div>
+    <div class="finalizar">
+      <a href="#" id="finalizar-compra" class="boton">✅ Finalizar compra por WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="volver-inicio">
+    <a href="./inicio.html">🏠 Volver al inicio</a>
+  </div>
+
+  <script type="module">
+    import { actualizarCarritoUI } from '../js/carrito-utils.js?v=2';
+    import { whatsappLink } from '../js/config.js';
+
+    const contenedor = document.getElementById('lista-carrito');
+    const totalSpan = document.getElementById('total-carrito');
+
+    function waCleanText(str){
+      // Quita caracteres invisibles/problemáticos
+      str = String(str || '')
+        .replace(/\u00A0/g, ' ')   // NBSP
+        .replace(/\u200B/g, '')    // zero-width space
+        .replace(/\uFEFF/g, '')    // BOM
+        .replace(/\r\n/g, '\n');
+
+      // Quita símbolos/emojis que terminan como caracteres raros en algunos WhatsApp
+      // (mantiene español: tildes, ñ, ¿?, etc.)
+      str = str.replace(/[^\x09\x0A\x0D\x20-\x7E\u00A1-\u00FF]/g, '');
+
+      // Limpia espacios extra
+      str = str.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+
+      return str.trim();
+    }
+
+    function escapeHtml(str){
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderCarrito() {
+      const carritoLocal = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
+
+      contenedor.innerHTML = '';
+      const total = carritoLocal.reduce((sum, item) => sum + item.precio, 0);
+
+      carritoLocal.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'carrito-item';
+        div.innerHTML = `
+          <img src="${escapeHtml(item.imagen)}" alt="${escapeHtml(item.nombre)}" referrerpolicy="no-referrer">
+          <div class="carrito-info">
+            <div class="nombre">${escapeHtml(item.nombre)}</div>
+            <div class="precio">S/. ${item.precio.toFixed(2)}</div>
+          </div>
+          <button class="eliminar" data-index="${index}" aria-label="Eliminar producto del carrito">✕</button>
+        `;
+        contenedor.appendChild(div);
+      });
+
+      totalSpan.textContent = `Total: S/. ${total.toFixed(2)}`;
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('eliminar')) {
+        const index = Number(e.target.dataset.index);
+        const carritoLocal = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
+        carritoLocal.splice(index, 1);
+        localStorage.setItem('carritoMardant', JSON.stringify(carritoLocal));
+
+        renderCarrito();
+        actualizarCarritoUI();
+      }
+    });
+
+    document.getElementById('finalizar-compra').addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const cart = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
+      if (!cart.length) return;
+
+      // Agrupar por id (si existe) o por nombre
+      const groups = new Map();
+      for (const item of cart) {
+        const key = (item.id && String(item.id).trim())
+          ? `id:${String(item.id).trim()}`
+          : `name:${item.nombre}`;
+
+        const g = groups.get(key) || { ...item, qty: 0 };
+        g.qty += 1;
+        groups.set(key, g);
+      }
+
+      const origin = location.origin;
+      const lines = [];
+      let total = 0;
+
+      let i = 1;
+      const trackingItems = [];
+      for (const g of groups.values()) {
+        const unit = Number(g.precio) || 0;
+        const sub  = unit * g.qty;
+        total += sub;
+        trackingItems.push({
+          item_id: g.id ? String(g.id).trim() : '',
+          item_name: g.nombre || 'Producto Mardant',
+          item_category: 'catalogo',
+          price: unit,
+          quantity: g.qty
+        });
+
+        lines.push(
+          `${i}) ${g.qty} x ${g.nombre} — S/. ${unit.toFixed(2)} c/u — Subtotal: S/. ${sub.toFixed(2)}`
+        );
+
+        // Link detalle solo si hay id
+        if (g.id && String(g.id).trim()) {
+          const link = `${origin}/views/producto.html?id=${encodeURIComponent(String(g.id).trim())}`;
+          lines.push(`   ${link}`);
+        }
+
+        i++;
+      }
+
+      const mensaje = [
+        '¡Hola! Quiero hacer un pedido en Mardant Perú.',
+        '',
+        'Mi pedido:',
+        ...lines,
+        '',
+        `TOTAL: S/. ${total.toFixed(2)}`,
+        '',
+        'Tipo de entrega: ¿Delivery o recojo en punto de entrega gratuito en Lima?'
+      ].join('\n');
+
+      const clean = waCleanText(mensaje);
+      const wa = whatsappLink(clean);
+      window.MardantTracking?.trackBeginCheckout?.({
+        value: total,
+        items: trackingItems
+      });
+      window.open(wa, '_blank', 'noopener,noreferrer');
+    });
+
+    renderCarrito();
+  </script>
+
+  <!-- Tracking (GA4 + eventos) -->
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>

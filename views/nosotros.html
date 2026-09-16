@@ -1,0 +1,180 @@
+<!-- views/nosotros.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre Mardant Perú | Tienda anime desde Japón</title>
+  <meta name="description" content="Conoce Mardant Perú, tienda online dedicada a productos oficiales de anime importados desde Japón, preventas y pedidos personalizados.">
+  <link rel="canonical" href="https://mardant.com/views/nosotros.html">
+  <meta property="og:title" content="Sobre Mardant Perú | Tienda anime desde Japón">
+  <meta property="og:description" content="Conoce Mardant Perú, tienda online dedicada a productos oficiales de anime importados desde Japón, preventas y pedidos personalizados.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mardant.com/views/nosotros.html">
+  <meta property="og:image" content="https://i.imgur.com/bXMSQ3E.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sobre Mardant Perú | Tienda anime desde Japón">
+  <meta name="twitter:description" content="Conoce Mardant Perú, tienda online dedicada a productos oficiales de anime importados desde Japón, preventas y pedidos personalizados.">
+  <meta name="twitter:image" content="https://i.imgur.com/bXMSQ3E.png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="../css/estilos.css?v=17" />
+</head>
+<body>
+  <h1 class="sr-only">Sobre Mardant Perú, tienda anime desde Japón</h1>
+
+  <!-- Banner superior unificado -->
+  <img
+    class="banner-top"
+    src="https://i.imgur.com/bXMSQ3E.png"
+    alt="Sobre Nosotros Mardant" referrerpolicy="no-referrer"
+  />
+
+  <section class="seccion sobre-nosotros">
+    <div class="contacto-centro">
+      <h2 class="titulo-seccion">¿Quiénes Somos?</h2>
+    </div>
+    <p class="texto-nosotros">
+      <strong>Mardant</strong> es una tienda online peruana dedicada a la venta de productos auténticos de Japón.
+      Trabajamos con artículos disponibles en Perú, preventas y productos a pedido, brindando atención personalizada
+      a través de WhatsApp.
+    </p>
+
+    <div class="contacto-centro">
+      <h2 class="titulo-seccion">Nuestros Productos</h2>
+    </div>
+    <p class="texto-nosotros">
+      Ofrecemos productos <strong>originales</strong> de alta calidad, importados directamente de
+      <strong>Japón</strong>, disponibles en cantidades <strong>limitadas</strong>. Renovamos
+      nuestro catálogo constantemente para ofrecerte artículos <strong>únicos</strong> de tus
+      series favoritas.
+    </p>
+
+    <div class="contacto-centro">
+      <h2 class="titulo-seccion">Nuestra Pasión</h2>
+    </div>
+    <p class="texto-nosotros">
+      Nos mueve la <strong>pasión por el anime</strong> y el <strong>compromiso</strong> con
+      nuestros clientes. Queremos que cada artículo que llegue a ti sea especial y alegre tu día.
+      Valoramos cada compra, cada mensaje y cada recomendación.
+    </p>
+
+    <!-- Galería -->
+    <div class="contacto-centro">
+      <h2 class="titulo-seccion">Galería de Entregas</h2>
+    </div>
+    <div class="galeria-nosotros">
+      <a href="#lb1">
+        <img src="https://i.imgur.com/tzNqItz.png" alt="Entregas Mardant 1" loading="lazy" referrerpolicy="no-referrer">
+      </a>
+      <a href="#lb2">
+        <img src="https://i.imgur.com/lFOVEmv.png" alt="Entregas Mardant 2" loading="lazy" referrerpolicy="no-referrer">
+      </a>
+    </div>
+
+    <!-- Lightbox (CSS puro con :target) -->
+    <div id="lb1" class="lightbox-overlay">
+      <img src="https://i.imgur.com/tzNqItz.png" alt="Entregas Mardant 1" referrerpolicy="no-referrer">
+      <a href="#" class="lightbox-close" aria-label="Cerrar">×</a>
+    </div>
+    <div id="lb2" class="lightbox-overlay">
+      <img src="https://i.imgur.com/lFOVEmv.png" alt="Entregas Mardant 2" referrerpolicy="no-referrer">
+      <a href="#" class="lightbox-close" aria-label="Cerrar">×</a>
+    </div>
+
+    <!-- CTAs redondeados -->
+    <div class="cta-row">
+      <a href="catalogo.html" data-vista="catalogo" class="cta-btn cta--primary" aria-label="Ir al catálogo">
+        <span class="cta-ico">🛒</span> Ver catálogo
+      </a>
+      <a href="../index.html" data-vista="inicio" class="cta-btn cta--primary" aria-label="Volver al inicio">
+        <span class="cta-ico">🏠</span> Volver al inicio
+      </a>
+    </div>
+  </section>
+
+  <!-- Botón flotante carrito -->
+  <a href="carrito.html" class="boton-carrito-flotante" title="Ver carrito 🛒" data-vista="carrito">
+    🛒<span id="contador-carrito" class="contador-carrito"></span>
+  </a>
+
+  <!-- Estilos locales (galería + lightbox + tipografía del cuerpo) -->
+  <style>
+    .texto-nosotros{
+      max-width: 980px;
+      margin: 0 auto 14px;
+      line-height: 1.7;
+      color: #4d4034;
+      padding: 0 16px;
+      text-align: left;
+    }
+    .sobre-nosotros .titulo-seccion{
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .sobre-nosotros .titulo-seccion::after{
+      width: 220px;
+      height: 3px;
+    }
+    .galeria-nosotros{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      max-width: 980px;
+      margin: 12px auto 28px;
+      padding: 0 16px;
+    }
+    .galeria-nosotros a{ display:block; }
+    .galeria-nosotros img{
+      width:100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: #efe3d2;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .galeria-nosotros img:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(0,0,0,.22);
+    }
+    .lightbox-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .lightbox-overlay:target{ display:flex; }
+    .lightbox-overlay img{
+      max-width: 92vw;
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.5);
+    }
+    .lightbox-close{
+      position: absolute;
+      top: 12px; right: 16px;
+      color: #fff;
+      font-size: 34px;
+      text-decoration: none;
+      line-height: 1;
+      opacity: .9;
+    }
+    .lightbox-close:hover{ opacity: 1; }
+    @media (max-width:640px){
+      .sobre-nosotros .titulo-seccion{ font-size: 24px; }
+      .galeria-nosotros{ grid-template-columns: 1fr; gap: 12px; }
+      .galeria-nosotros img{ height: 200px; }
+      .texto-nosotros{ padding: 0 12px; }
+    }
+  </style>
+
+  <!-- Tracking -->
+  <script type="module" src="../js/tracking.js?v=8"></script>
+  <script type="module" src="../js/account-widget.js?v=5"></script>
+</body>
+</html>
