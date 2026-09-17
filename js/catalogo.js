@@ -419,11 +419,11 @@ function cardProducto(p) {
   const shareNote = estado === 'AGOTADO'
     ? 'Producto agotado. Consulta si se puede volver a traer.'
     : estado === 'OFERTA'
-      ? 'Oferta activa en el catalogo Mardant.'
-      : 'Producto disponible en el catalogo Mardant.';
+      ? 'Oferta activa en el catalogo Dale Start.'
+      : 'Producto disponible en el catalogo Dale Start.';
   const shareCta = estado === 'AGOTADO'
-    ? 'Cotizar producto agotado en mardant.com'
-    : 'Ver producto en mardant.com';
+    ? 'Cotizar producto agotado en dalestart.com.ar'
+    : 'Ver producto en dalestart.com.ar';
   const trackPrice = tieneOferta ? ofertaNum : precioNum;
   const trackCategory = [p.categoria, p.subcategoria].filter(Boolean).join(' - ');
   const trackBase = `
@@ -467,18 +467,18 @@ function cardProducto(p) {
         class="social-icon-button"
         type="button"
         data-share-product
-        data-share-title="${nombre} - Mardant"
-        data-share-text="Mira este producto en Mardant: ${nombre}"
+        data-share-title="${nombre} - Dale Start"
+        data-share-text="Mira este producto en Dale Start: ${nombre}"
         data-share-url="${escapeHtml(buildShareUrl({ producto: p.id }))}"
         data-share-image="${img}"
-        data-share-eyebrow="Catalogo Mardant"
+        data-share-eyebrow="Catalogo Dale Start"
         data-share-subtitle="ID: ${escapeHtml(String(p.id ?? '').trim())}"
         data-share-price="${escapeHtml(sharePrice)}"
         data-share-old-price="${escapeHtml(shareOldPrice)}"
         data-share-badge="${estado}"
         data-share-note="${escapeHtml(shareNote)}"
         data-share-cta="${escapeHtml(shareCta)}"
-        data-share-file="mardant-producto-${escapeHtml(String(p.id ?? 'producto'))}.png"
+        data-share-file="Dale Start-producto-${escapeHtml(String(p.id ?? 'producto'))}.png"
         aria-label="Compartir ${nombre}"
         title="Compartir">
         ${shareIcon()}

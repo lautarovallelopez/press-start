@@ -11,7 +11,7 @@ const PAGE_SIZE = 20;
 const CATALOG_PAGE_PRIMARY_TIMEOUT_MS = 35000;
 const CATALOG_PAGE_FALLBACK_TIMEOUT_MS = 20000;
 const sharedLoteId = new URLSearchParams(location.search).get('lote') || '';
-const PRODUCT_NOTE = 'No incluye envío de Japón 🇯🇵 a Perú 🇵🇪';
+const PRODUCT_NOTE = 'No incluye envío de Japón 🇯🇵 a Argentina 🇵🇪';
 
 const grid = document.getElementById('catalogoJaponGrid');
 const feedback = document.getElementById('catalogoJaponFeedback');
@@ -651,7 +651,7 @@ function drawShareImageFallback(ctx, id){
   ctx.fillText(`Lote #${id}`, 540, 690);
   ctx.fillStyle = '#756452';
   ctx.font = '700 34px Arial, sans-serif';
-  ctx.fillText('Mira la imagen completa en mardant.com', 540, 770);
+  ctx.fillText('Mira la imagen completa en dalestart.com.ar', 540, 770);
 }
 
 function canvasToBlob(canvas){
@@ -753,7 +753,7 @@ async function createShareImageBlob(item){
   ctx.fillStyle = '#ffffff';
   ctx.font = '900 38px Arial, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Solicitar por WhatsApp en mardant.com', 540, 1790);
+  ctx.fillText('Solicitar por WhatsApp en dalestart.com.ar', 540, 1790);
 
   return canvasToBlob(canvas);
 }
@@ -819,7 +819,7 @@ async function shareLote(id, url, button){
   const loteId = String(id || '').trim();
   const shareUrl = url || loteShareUrl(loteId);
   const item = getCatalogItem(loteId);
-  const text = `Mira el lote #${loteId} en el catalogo de productos en Japon de Mardant.`;
+  const text = `Mira el lote #${loteId} en el catalogo de productos en Japon de Dale Start.`;
 
   button?.classList.add('is-loading');
   if (button) button.disabled = true;

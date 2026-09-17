@@ -224,10 +224,10 @@ function renderPreventasHome(lista) {
   cont.innerHTML = '';
 
   elegirBloqueRotativo(lista, MAX_HOME_ITEMS, { modo: 'hora', clave: 'preventas' }).forEach((p) => {
-    const nombre = String(p.nombre || p.descripcion || 'Preventa Mardant').trim();
+    const nombre = String(p.nombre || p.descripcion || 'Preventa Dale Start').trim();
     const img = String(p.imagen || '').trim() || 'https://via.placeholder.com/300x300?text=Sin+imagen';
     const precio = numberValue(p.precio);
-    const llegada = p['fecha aprox llegada peru'] || 'Próximamente';
+    const llegada = p['fecha aprox llegada argentina'] || 'Próximamente';
     const cta = 'RESERVAR CON S/ 15';
     const div = document.createElement('div');
     div.className = `producto${p.soloDesktop ? ' mostrar-solo-desktop' : ''}`;
@@ -306,7 +306,7 @@ function renderCatalogoJaponHome(lista) {
       <div class="nombre">Lote #${escapeHtml(id)}</div>
       <div class="precio precio-japon-producto">
         <span class="precio-ruta precio-unico"><span>Precio</span><strong>${escapeHtml(precio)}</strong></span>
-        <span class="precio-nota">No incluye envío de Japón 🇯🇵 a Perú 🇵🇪</span>
+        <span class="precio-nota">No incluye envío de Japón 🇯🇵 a Argentina 🇵🇪</span>
       </div>
       <div class="estado ${estadoClase}">${estadoTexto}</div>
       <a href="${whatsappLink(`Hola, quiero consultar el lote #${id}`)}"

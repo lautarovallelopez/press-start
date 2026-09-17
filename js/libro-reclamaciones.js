@@ -1,11 +1,11 @@
 import { fetchJSON, fetchRoute } from './api-client.js?v=7';
 
 const PROVIDER = {
-  proveedor: 'Mardant',
+  proveedor: 'Dale Start',
   ruc: '15615825481',
-  correo: 'gamesmardant@gmail.com',
+  correo: 'dalestart@gmail.com',
   whatsapp: '+54 9 11-3947-3925',
-  ubicacion: 'Lima, Perú'
+  ubicacion: 'Buenos Aires, Argentina'
 };
 
 const formPanel = document.getElementById('claimFormPanel');
@@ -302,7 +302,7 @@ function buildReceiptMarkup(data) {
         <h2>Plazo de respuesta</h2>
         ${receiptRow('Fecha límite de respuesta', data.fechaLimiteRespuesta)}
         <p class="receipt-final">
-          Conserve esta constancia. Mardant responderá su reclamo o queja dentro del plazo máximo de 15 días hábiles.
+          Conserve esta constancia. Dale Start responderá su reclamo o queja dentro del plazo máximo de 15 días hábiles.
         </p>
       </section>
     </article>

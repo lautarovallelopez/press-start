@@ -5,7 +5,7 @@ import { fetchRoute } from './api-client.js?v=7';
 /* =================================
    CONFIG WHATSAPP
    - Si quieres que el botón vaya directo a tu WhatsApp:
-     pon tu número con código país, SOLO dígitos. Ej: 51987654321 (Perú)
+     pon tu número con código país, SOLO dígitos. Ej: 51987654321 (Argentina)
    - Si lo dejas vacío, se abrirá WhatsApp con el texto y el cliente elige el chat.
 ================================= */
 // El numero se define en config.js para mantener una sola fuente de verdad.
@@ -371,7 +371,7 @@ function buildWhatsappLink(c){
   const marit = fmtPenMaybe(c?.precio_maritimo_pen);
 
   const lines = [
-    'Hola Mardant, quiero comprar esta cotización:',
+    'Hola Dale Start, quiero comprar esta cotización:',
     cotId ? `ID: ${cotId}` : '',
     nombre ? `Producto: ${nombre}` : '',
     url ? `URL: ${url}` : '',

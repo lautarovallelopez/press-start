@@ -1,4 +1,4 @@
-/* GA4 + eventos comerciales de Mardant */
+/* GA4 + eventos comerciales de Dale Start */
 
 const GA4_ID = 'G-MJ9XGF9EZ8';
 

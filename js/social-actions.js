@@ -68,12 +68,12 @@ export function buildShareUrl(params = {}){
 }
 
 export async function shareItem({ title, text, url }){
-  const shareText = text || title || 'Mardant';
+  const shareText = text || title || 'Dale Start';
   const shareUrl = url || location.href;
 
   if (navigator.share) {
     try {
-      await navigator.share({ title: title || 'Mardant', text: shareText, url: shareUrl });
+      await navigator.share({ title: title || 'Dale Start', text: shareText, url: shareUrl });
       return;
     } catch (error) {
       if (error?.name === 'AbortError') return;
@@ -172,14 +172,14 @@ function drawTextLines(ctx, lines, x, y, lineHeight){
 
 async function createShareCardBlob({
   imageUrl = '',
-  eyebrow = 'MARDANT',
-  title = 'Producto Mardant',
+  eyebrow = 'Dale Start',
+  title = 'Producto Dale Start',
   subtitle = '',
   price = '',
   oldPrice = '',
   badge = '',
   note = '',
-  cta = 'Ver en mardant.com'
+  cta = 'Ver en dalestart.com.ar'
 } = {}){
   const canvas = document.createElement('canvas');
   canvas.width = 1080;
@@ -198,7 +198,7 @@ async function createShareCardBlob({
   ctx.fillStyle = '#a8322a';
   ctx.font = '900 56px Arial, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('MARDANT', 540, 166);
+  ctx.fillText('Dale Start', 540, 166);
   ctx.restore();
 
   ctx.save();
@@ -229,7 +229,7 @@ async function createShareCardBlob({
     ctx.fillStyle = '#7c6a55';
     ctx.font = '900 54px Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Mardant Peru', 540, 604);
+    ctx.fillText('Dale Start Argentina', 540, 604);
     ctx.font = '800 34px Arial, sans-serif';
     ctx.fillText('Imagen no disponible para compartir', 540, 662);
     ctx.restore();
@@ -247,7 +247,7 @@ async function createShareCardBlob({
   ctx.textAlign = 'left';
   ctx.fillStyle = '#d8c6aa';
   ctx.font = '900 32px Arial, sans-serif';
-  ctx.fillText(String(eyebrow || 'MARDANT').toUpperCase(), 120, 1288);
+  ctx.fillText(String(eyebrow || 'Dale Start').toUpperCase(), 120, 1288);
 
   ctx.fillStyle = '#f6cf56';
   ctx.font = '900 58px Arial, sans-serif';
@@ -329,8 +329,8 @@ export async function shareVisualItem(options = {}){
   const {
     button,
     fileName = 'mardant-producto.png',
-    title = 'Mardant',
-    text = 'Mira este producto en Mardant',
+    title = 'Dale Start',
+    text = 'Mira este producto en Dale Start',
     url = location.href
   } = options;
 

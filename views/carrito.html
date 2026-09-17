@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Carrito - Mardant</title>
+  <title>Carrito - Dale Start</title>
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
@@ -124,7 +124,7 @@
         total += sub;
         trackingItems.push({
           item_id: g.id ? String(g.id).trim() : '',
-          item_name: g.nombre || 'Producto Mardant',
+          item_name: g.nombre || 'Producto Dale Start',
           item_category: 'catalogo',
           price: unit,
           quantity: g.qty
@@ -144,14 +144,14 @@
       }
 
       const mensaje = [
-        '¡Hola! Quiero hacer un pedido en Mardant Perú.',
+        '¡Hola! Quiero hacer un pedido en Dale Start Argentina.',
         '',
         'Mi pedido:',
         ...lines,
         '',
         `TOTAL: S/. ${total.toFixed(2)}`,
         '',
-        'Tipo de entrega: ¿Delivery o recojo en punto de entrega gratuito en Lima?'
+        'Tipo de entrega: ¿Delivery o recojo en punto de entrega gratuito en Buenos Aires?'
       ].join('\n');
 
       const clean = waCleanText(mensaje);

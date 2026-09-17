@@ -130,12 +130,11 @@ function renderSiteFooter() {
   footer.innerHTML = `
     <div class="mardant-footer__inner">
       <section aria-labelledby="footer-brand-title">
-        <h2 id="footer-brand-title">Mardant Perú</h2>
+        <h2 id="footer-brand-title">Dale Start</h2>
         <ul class="mardant-footer__meta">
-          <li>RUC: 15615825481</li>
           <li>WhatsApp: <a href="https://wa.me/5491139473925" target="_blank" rel="noopener noreferrer">+54 9 11-3947-3925</a></li>
-          <li>Correo: <a href="mailto:gamesmardant@gmail.com">gamesmardant@gmail.com</a></li>
-          <li>Ubicación: Lima, Perú</li>
+          <li>Correo: <a href="mailto:dalestart@gmail.com">dalestart@gmail.com</a></li>
+          <li>Ubicación: Buenos Aires, Argentina</li>
         </ul>
       </section>
 
@@ -144,29 +143,12 @@ function renderSiteFooter() {
         <div class="mardant-footer__links">
           <a href="/">Inicio</a>
           <a href="/views/catalogo.html">Catálogo</a>
-          <a href="/views/preventa.html">Preventa</a>
-          <a href="/views/pedidos.html">Productos a pedido</a>
-          <a href="/views/catalogo-japon.html">Catálogo Japón</a>
           <a href="/views/como.html">Cómo comprar</a>
           <a href="/views/envios-entregas.html">Envíos y entregas</a>
-          <a href="/views/cambios-devoluciones.html">Cambios y devoluciones</a>
-          <a href="/views/terminos-condiciones.html">Términos y condiciones</a>
-          <a href="/views/terminos-importacion.html">Términos de importación</a>
-          <a href="/views/politica-privacidad.html">Política de privacidad</a>
-          <a href="/views/informacion-legal.html">Información legal</a>
         </div>
       </nav>
-
-      <section aria-labelledby="footer-claims-title">
-        <h3 id="footer-claims-title">Atención al consumidor</h3>
-        <p style="margin-top:6px">
-          <a class="mardant-footer__claim" href="/views/libro-reclamaciones.html" aria-label="Abrir Libro de Reclamaciones">
-            <img src="https://i.imgur.com/o69mPYC.png" alt="Libro de Reclamaciones de Mardant" loading="lazy" referrerpolicy="no-referrer">
-          </a>
-        </p>
-      </section>
     </div>
-    <p class="mardant-footer__copy">© 2026 Mardant Perú. Todos los derechos reservados.</p>
+    <p class="mardant-footer__copy">© 2026 Dale Start. Todos los derechos reservados.</p>
   `;
 
   document.body.appendChild(footer);

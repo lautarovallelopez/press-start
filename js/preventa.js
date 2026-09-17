@@ -160,7 +160,7 @@ function render(lista = []) {
 }
 
 function card(p) {
-  const nombreRaw = String(p.nombre || 'Preventa Mardant').trim();
+  const nombreRaw = String(p.nombre || 'Preventa Dale Start').trim();
   const nombre = escapeHtml(nombreRaw);
   const img = p.imagen?.trim()
     ? escapeHtml(p.imagen)
@@ -168,7 +168,7 @@ function card(p) {
   const ref = p.id || p.nombre || 'preventa';
   const urlWA = whatsappLink(`Hola, quiero reservar esta preventa con S/ 15: ${nombreRaw}`);
   const precio = `S/. ${(+p.precio || 0).toFixed(2)}`;
-  const llegada = p['fecha aprox llegada peru'] || 'Proximamente';
+  const llegada = p['fecha aprox llegada argentina'] || 'Proximamente';
   const trackCategory = [p.categoria, p.subcategoria].filter(Boolean).join(' - ') || 'Preventa';
 
   const div = document.createElement('div');
@@ -178,7 +178,7 @@ function card(p) {
     <div class="nombre">${nombre}</div>
     <div class="categoria">${escapeHtml(p.categoria || '')}${p.subcategoria ? ' - ' + escapeHtml(p.subcategoria) : ''}</div>
     <div class="precio">S/. ${(+p.precio || 0).toFixed(2)}</div>
-    <div class="estado">Llega: ${escapeHtml(p['fecha aprox llegada peru'] || 'Proximamente')}</div>
+    <div class="estado">Llega: ${escapeHtml(p['fecha aprox llegada argentina'] || 'Proximamente')}</div>
     <a href="${urlWA}"
        target="_blank"
        rel="noopener noreferrer"
@@ -194,16 +194,16 @@ function card(p) {
         class="social-icon-button"
         type="button"
         data-share-preventa
-        data-share-title="${nombre} - Preventa Mardant"
-        data-share-text="Mira esta preventa en Mardant: ${nombre}"
+        data-share-title="${nombre} - Preventa Dale Start"
+        data-share-text="Mira esta preventa en Dale Start: ${nombre}"
         data-share-url="${escapeHtml(buildShareUrl({ preventa: ref }))}"
         data-share-image="${img}"
-        data-share-eyebrow="Preventa Mardant"
+        data-share-eyebrow="Preventa Dale Start"
         data-share-subtitle="Reserva desde S/ 15"
         data-share-price="${escapeHtml(precio)}"
         data-share-badge="PREVENTA"
         data-share-note="Llegada aproximada: ${escapeHtml(llegada)}"
-        data-share-cta="Reservar por WhatsApp en mardant.com"
+        data-share-cta="Reservar por WhatsApp en dalestart.com.ar"
         data-share-file="mardant-preventa-${escapeHtml(String(ref).replace(/\s+/g, '-'))}.png"
         aria-label="Compartir ${nombre}"
         title="Compartir">

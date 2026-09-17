@@ -84,10 +84,10 @@ function setCanonical(url) {
 }
 
 function updateProductMetadata({ nombre, id, categoria }) {
-  const cleanName = nombre || 'Producto Mardant';
-  const title = `${cleanName} | Mardant Perú`;
-  const description = `Consulta ${cleanName} en Mardant Perú. Productos oficiales de anime, figuras, peluches y coleccionables importados desde Japón.`;
-  const url = `https://mardant.com${location.pathname}${id ? `?id=${encodeURIComponent(id)}` : ''}`;
+  const cleanName = nombre || 'Producto Dale Start';
+  const title = `${cleanName} | Dale Start Argentina`;
+  const description = `Consulta ${cleanName} en Dale Start Argentina. Productos oficiales de anime, figuras, peluches y coleccionables importados desde Japón.`;
+  const url = `https://dalestart.com.ar${location.pathname}${id ? `?id=${encodeURIComponent(id)}` : ''}`;
 
   document.title = title;
   setCanonical(url);
