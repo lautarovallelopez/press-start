@@ -600,16 +600,7 @@ html,body{
   line-height:1;
 }
 .boton-carrito-flotante:hover{background:#a8322a;transform:scale(1.08)}
-.boton-cuenta-flotante{
-  min-width:156px;
-  gap:10px;
-  padding:10px 14px;
-  border:1px solid rgba(244,208,111,.42);
-  background:linear-gradient(135deg, #171411, #8f2722);
-  box-shadow:0 12px 28px rgba(0,0,0,.28);
-  z-index:10001;
-}
-.boton-cuenta-flotante:hover{box-shadow:0 16px 34px rgba(0,0,0,.34);filter:saturate(1.03)}
+
 @media (max-width:480px){
   body{padding-bottom:0}
   #vista-inicio .producto{
@@ -671,30 +662,7 @@ html,body{
     white-space:nowrap;
     font-size:10px;
   }
-  .boton-cuenta-flotante{
-    right:12px !important;
-    bottom:74px !important;
-    width:50px !important;
-    height:50px !important;
-    max-width:50px !important;
-    min-width:0 !important;
-    min-height:50px !important;
-    padding:0 !important;
-    border-radius:50% !important;
-    justify-content:center !important;
-    gap:0 !important;
-    overflow:hidden !important;
-  }
-  .boton-cuenta-flotante .cuenta-copy,
-  .boton-cuenta-flotante .texto{display:none !important}
-  .boton-cuenta-flotante .cuenta-icon,
-  .boton-cuenta-flotante .emoji{
-    width:34px !important;
-    height:34px !important;
-    margin:0 !important;
-    font-size:21px !important;
-  }
-  .cuenta-status{display:none}
+
   .boton-carrito-flotante{
     width:50px !important;
     height:50px !important;

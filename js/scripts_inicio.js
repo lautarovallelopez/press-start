@@ -3,7 +3,6 @@ import { AUTH_KEYS, whatsappLink } from './config.js?v=5';
 import { API_CACHE_TTL, cachedFetchJSON, getCachedJSON } from './api-client.js?v=7';
 import { cachedFetchJapanJSON, getCachedJapanJSON } from './japan-api.js?v=1';
 import { actualizarCarritoUI } from './carrito-utils.js?v=2';
-import { ensureAccountWidget } from './account-widget.js?v=5';
 
 const $ = (sel) => document.querySelector(sel);
 const MAX_HOME_ITEMS = 4;
@@ -128,9 +127,6 @@ function normalizarLista(data, key = 'productos') {
   return [];
 }
 
-function ensureCuentaButton() {
-  ensureAccountWidget();
-}
 
 function renderUltimas() {
   const cont = $('#ultimas-importaciones');
@@ -513,7 +509,6 @@ function renderHome(data) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  ensureCuentaButton();
   if (typeof actualizarCarritoUI === 'function') {
     try { actualizarCarritoUI(); } catch (error) { console.error(error); }
   }
@@ -542,7 +537,3 @@ if (ind && slides.length) {
   setInterval(() => { idx = (idx + 1) % slides.length; show(); }, 8000);
   show();
 }
-
-window.addEventListener('storage', (event) => {
-  if ([KEYS.TOKEN, KEYS.NAME].includes(event.key)) ensureCuentaButton();
-});
