@@ -80,26 +80,6 @@ export function getCachedJapanJSON(accion, options = {}) {
   return getCachedJSON(accion, { ...shared, baseUrl:JAPAN_LEGACY_API_URL });
 }
 
-export async function fetchJapanJSON(accion, options = {}) {
-  const shared = cleanOptions(options);
-  const signal = options.signal;
-  return withJapanFallback(
-    () => fetchJSON(accion, {
-      ...shared,
-      baseUrl:JAPAN_API_URL,
-      retries:0,
-      timeoutMs:requestTimeout(options, false)
-    }),
-    () => fetchJSON(accion, {
-      ...shared,
-      baseUrl:JAPAN_LEGACY_API_URL,
-      retries:0,
-      timeoutMs:requestTimeout(options, true)
-    }),
-    signal
-  );
-}
-
 export async function cachedFetchJapanJSON(accion, options = {}) {
   const shared = cleanOptions(options);
   const signal = options.signal;
@@ -114,24 +94,6 @@ export async function cachedFetchJapanJSON(accion, options = {}) {
       ...shared,
       baseUrl:JAPAN_LEGACY_API_URL,
       retries:0,
-      timeoutMs:requestTimeout(options, true)
-    }),
-    signal
-  );
-}
-
-export async function fetchJapanRoute(route, body = {}, options = {}) {
-  const shared = cleanOptions(options);
-  const signal = options.signal;
-  return withJapanFallback(
-    () => fetchRoute(route, body, {
-      ...shared,
-      baseUrl:JAPAN_API_URL,
-      timeoutMs:requestTimeout(options, false)
-    }),
-    () => fetchRoute(route, body, {
-      ...shared,
-      baseUrl:JAPAN_LEGACY_API_URL,
       timeoutMs:requestTimeout(options, true)
     }),
     signal

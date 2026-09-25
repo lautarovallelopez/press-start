@@ -35,7 +35,7 @@ export function setupSearchTracking(input, catalog, options = {}) {
   };
 }
 
-export function createSearchTracker(catalog, options = {}) {
+function createSearchTracker(catalog, options = {}) {
   let pending = null;
   let pendingType = '';
   let destroyed = false;
