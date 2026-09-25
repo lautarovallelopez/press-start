@@ -224,40 +224,7 @@ html,body{
   justify-content:center;
   margin:0 0 18px;
 }
-.titulo-link.home-title-link{
-  width:min(100%, 760px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  padding:16px 22px;
-  border:1px solid var(--section-line);
-  border-left:6px solid var(--section-accent);
-  border-radius:8px;
-  background:
-    linear-gradient(90deg, rgba(168,50,42,.045), rgba(255,255,255,.92)),
-    var(--section-bg);
-  box-shadow:0 8px 22px rgba(23,20,17,.08);
-  color:var(--section-ink);
-  text-align:left;
-  position:relative;
-  overflow:hidden;
-}
-.titulo-link.home-title-link::after{
-  content:"";
-  position:absolute;
-  left:70px;
-  right:18px;
-  bottom:12px;
-  height:1px;
-  background:linear-gradient(90deg, rgba(168,50,42,.35), transparent);
-  pointer-events:none;
-}
-.titulo-link.home-title-link:hover{
-  transform:translateY(-2px) scale(1.01);
-  color:var(--section-ink);
-  box-shadow:0 14px 30px rgba(23,20,17,.13);
-}
+
 .section-icon{
   width:50px;
   height:50px;
@@ -295,13 +262,7 @@ html,body{
   line-height:1.05;
 }
 @media (max-width:560px){
-  .titulo-link.home-title-link{
-    justify-content:flex-start;
-    padding:12px 14px;
-    border-left-width:5px;
-    gap:10px;
-  }
-  .titulo-link.home-title-link::after{left:62px}
+  
   .section-icon{
     width:42px;
     height:42px;
@@ -310,10 +271,6 @@ html,body{
   .section-kicker{font-size:10px}
 }
 @media (max-width:360px){
-  .titulo-link.home-title-link{
-    padding:11px 12px;
-    gap:8px;
-  }
   .section-title{
     font-size:20px;
   }
@@ -482,34 +439,15 @@ html,body{
 .seccion-catalogo-japon{
   padding-top:8px;
 }
-.seccion-catalogo-japon .titulo-link.home-title-link{
-  border-color:#d8c6aa;
-  border-left-color:#a8322a;
-  background:
-    linear-gradient(90deg, rgba(168,50,42,.045), rgba(255,255,255,.92)),
-    #fbf7ef;
-  box-shadow:0 8px 22px rgba(23,20,17,.08);
-}
-.seccion-catalogo-japon .titulo-link.home-title-link::before{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  width:6px;
-  background:#a8322a;
-  border-radius:8px 0 0 8px;
-  pointer-events:none;
-}
+
+
 .seccion-catalogo-japon .section-icon{
   background:#a8322a;
   color:#fff;
   border:0;
   opacity:1;
 }
-.seccion-catalogo-japon .titulo-link.home-title-link::after{
-  background:linear-gradient(90deg, rgba(168,50,42,.35), transparent);
-}
+
 .seccion-catalogo-japon .grid-japon-home{
   margin-top:0;
 }
