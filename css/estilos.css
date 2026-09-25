@@ -277,56 +277,6 @@ h2{ font-size: clamp(22px, 3.0vw, 32px); }
 .boton-carrito-flotante:hover{background:var(--accent);transform:scale(1.08)}
 .contador-carrito{position:absolute;top:-6px;right:-6px;background:#e53935;color:#fff;font-size:12px;padding:2px 6px;border-radius:50%;font-weight:900}
 
-.boton-cuenta-flotante{
-  position:fixed;
-  top:16px;
-  right:16px;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  min-width:156px;
-  padding:10px 14px;
-  color:#fff;
-  text-decoration:none;
-  border:1px solid rgba(244,208,111,.42);
-  border-radius:999px;
-  background:linear-gradient(135deg, #171411, #8f2722);
-  box-shadow:0 12px 28px rgba(0,0,0,.28);
-  z-index:10001;
-  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
-}
-.boton-cuenta-flotante:hover{
-  transform:translateY(-1px);
-  box-shadow:0 16px 34px rgba(0,0,0,.34);
-  filter:saturate(1.03);
-}
-.cuenta-icon{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:rgba(255,255,255,.16);
-  font-size:18px;
-  flex:0 0 auto;
-}
-.cuenta-copy{
-  display:flex;
-  flex-direction:column;
-  line-height:1.05;
-}
-.cuenta-label{
-  font-size:14px;
-  font-weight:900;
-}
-.cuenta-status{
-  margin-top:3px;
-  font-size:11px;
-  font-weight:800;
-  color:#f4d06f;
-  white-space:nowrap;
-}
 @media (max-width:560px){
   .boton-carrito-flotante{
     right:18px;
@@ -335,32 +285,7 @@ h2{ font-size: clamp(22px, 3.0vw, 32px); }
     height:58px;
     font-size:28px;
   }
-  .boton-cuenta-flotante{
-    top:auto;
-    right:18px;
-    bottom:88px;
-    width:58px;
-    height:58px;
-    max-width:58px;
-    min-width:0;
-    min-height:58px;
-    padding:0;
-    justify-content:center;
-    gap:0;
-    border-radius:50%;
-    overflow:hidden;
-  }
-  .boton-cuenta-flotante .cuenta-copy,
-  .boton-cuenta-flotante .texto{display:none}
-  .boton-cuenta-flotante .cuenta-icon,
-  .boton-cuenta-flotante .emoji{
-    width:38px;
-    height:38px;
-    margin:0;
-    font-size:24px;
-  }
-  .cuenta-status{display:none}
-  body.floating-controls-clear-content .boton-cuenta-flotante,
+
   body.floating-controls-clear-content .boton-carrito-flotante{
     transform:translateX(calc(100% + 28px)) !important;
     opacity:0;
@@ -536,32 +461,7 @@ h2{ font-size: clamp(22px, 3.0vw, 32px); }
     height:50px !important;
     font-size:24px !important;
   }
-  .boton-cuenta-flotante{
-    top:auto !important;
-    right:12px !important;
-    bottom:74px !important;
-    width:50px !important;
-    height:50px !important;
-    max-width:50px !important;
-    min-width:0 !important;
-    min-height:50px !important;
-    padding:0 !important;
-    border-radius:50% !important;
-    justify-content:center !important;
-    gap:0 !important;
-    overflow:hidden !important;
-  }
-  .boton-cuenta-flotante .cuenta-copy,
-  .boton-cuenta-flotante .texto{
-    display:none !important;
-  }
-  .boton-cuenta-flotante .cuenta-icon,
-  .boton-cuenta-flotante .emoji{
-    width:34px !important;
-    height:34px !important;
-    margin:0 !important;
-    font-size:21px !important;
-  }
+
 }
 
 /* CTA */
