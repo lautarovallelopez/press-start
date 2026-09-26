@@ -1,7 +1,6 @@
 // === js/scripts_inicio.js ===
-import { AUTH_KEYS, whatsappLink } from './config.js?v=5';
+import { whatsappLink } from './config.js?v=5';
 import { API_CACHE_TTL, cachedFetchJSON, getCachedJSON } from './api-client.js?v=7';
-import { cachedFetchJapanJSON, getCachedJapanJSON } from './japan-api.js?v=1';
 import { actualizarCarritoUI } from './carrito-utils.js?v=2';
 
 const $ = (sel) => document.querySelector(sel);
@@ -11,13 +10,6 @@ const ROTACION_ULTIMAS_MS = 15000;
 
 let ultimasLista15 = [];
 let ultimasIndiceInicio = 0;
-let japanHomeLoadScheduled = false;
-
-const KEYS = {
-  TOKEN: (AUTH_KEYS && AUTH_KEYS.TOKEN) || 'mardant_token',
-  NAME: (AUTH_KEYS && AUTH_KEYS.NAME) || 'mardant_name',
-  CLIENT: (AUTH_KEYS && AUTH_KEYS.CLIENT) || 'mardant_client'
-};
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -30,16 +22,6 @@ function escapeHtml(value) {
 
 function numberValue(value) {
   const number = Number(String(value ?? '').replace(',', '.'));
-  return Number.isFinite(number) ? number : 0;
-}
-
-function parsePrice(value) {
-  const normalized = String(value ?? '')
-    .replace(/\s/g, '')
-    .replace(/s\/\.?/i, '')
-    .replace(/,/g, '.')
-    .replace(/[^\d.]/g, '');
-  const number = Number(normalized);
   return Number.isFinite(number) ? number : 0;
 }
 
@@ -106,18 +88,6 @@ function productoAgotado(producto) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
   return estado.includes('AGOTADO') || estado.includes('SIN STOCK');
-}
-
-function loteNumber(value) {
-  const match = String(value || '').match(/\d+/g);
-  return match ? Number(match.join('')) || 0 : 0;
-}
-
-function costoCatalogoJapon(value) {
-  const text = String(value || '').trim();
-  if (!text) return 'Por confirmar';
-  if (/^(S\/|\$)/i.test(text)) return text;
-  return `S/ ${text}`;
 }
 
 function normalizarLista(data, key = 'productos') {
@@ -279,90 +249,6 @@ function renderPedidosHome(lista) {
   });
 }
 
-function renderCatalogoJaponHome(lista) {
-  const cont = $('#catalogo-japon-home');
-  if (!cont) return;
-  cont.innerHTML = '';
-
-  const ordenada = lista
-    .filter((p) => p && p.id_lote && p.imagen_url)
-    .sort((a, b) => loteNumber(b.id_lote) - loteNumber(a.id_lote));
-
-  elegirBloqueRotativo(ordenada, 3, { modo: 'hora', clave: 'catalogo-japon' }).forEach((p) => {
-    const id = String(p.id_lote || '').trim();
-    const etiqueta = String(p.etiqueta || 'disponible').trim().toLowerCase();
-    const estadoTexto = etiqueta === 'preventa' ? 'PREVENTA' : 'DISPONIBLE';
-    const estadoClase = etiqueta === 'preventa' ? 'estado-preventa' : 'estado-disponible';
-    const precio = costoCatalogoJapon(p.precio_producto);
-    const cta = 'SOLICITAR';
-    const div = document.createElement('div');
-    div.className = 'producto';
-    div.innerHTML = `
-      <img src="${escapeHtml(p.imagen_url)}" alt="Lote #${escapeHtml(id)}" class="img" loading="lazy" referrerpolicy="no-referrer">
-      <div class="nombre">Lote #${escapeHtml(id)}</div>
-      <div class="precio precio-japon-producto">
-        <span class="precio-ruta precio-unico"><span>Precio</span><strong>${escapeHtml(precio)}</strong></span>
-        <span class="precio-nota">No incluye envío de Japón 🇯🇵 a Argentina 🇵🇪</span>
-      </div>
-      <div class="estado ${estadoClase}">${estadoTexto}</div>
-      <a href="${whatsappLink(`Hola, quiero consultar el lote #${id}`)}"
-         class="boton"
-         target="_blank"
-         rel="noopener noreferrer"
-         ${trackAttrs({ id, name: `Lote #${id}`, price: parsePrice(precio), category: 'Catálogo Japón', source: 'home_catalogo_japon', cta })}>${cta}</a>`;
-    cont.appendChild(div);
-  });
-}
-
-function renderCatalogoJaponHomeStatus(message, isError = false) {
-  const cont = $('#catalogo-japon-home');
-  if (!cont || cont.querySelector('.producto')) return;
-  cont.innerHTML = '';
-  const status = document.createElement('p');
-  status.className = `home-section-status${isError ? ' is-error' : ''}`;
-  status.setAttribute('role', 'status');
-  status.textContent = message;
-  cont.appendChild(status);
-}
-
-async function loadCatalogoJaponHomeLazy() {
-  const options = {
-    ttl: API_CACHE_TTL.CATALOGO_PREVENTAS_JAPON,
-    cacheId: 'catalogo-japon-home-v3'
-  };
-  const cached = getCachedJapanJSON('catalogoJaponHome', { ...options, allowStale:true });
-  const cachedItems = normalizarLista(cached);
-  if (cachedItems.length) renderCatalogoJaponHome(cachedItems);
-  else renderCatalogoJaponHomeStatus('Cargando productos de Japón...');
-
-  try {
-    const data = await cachedFetchJapanJSON('catalogoJaponHome', {
-      ...options,
-      staleWhileRevalidate: true,
-      retries: 0,
-      primaryTimeoutMs: 5000,
-      fallbackTimeoutMs: 12000
-    });
-    const items = normalizarLista(data);
-    if (items.length) renderCatalogoJaponHome(items);
-    else renderCatalogoJaponHomeStatus('No hay productos de Japón disponibles por el momento.');
-  } catch (error) {
-    console.warn('No se pudo cargar la sección Japón:', error);
-    renderCatalogoJaponHomeStatus('No se pudo cargar esta sección. Intenta nuevamente más tarde.', true);
-  }
-}
-
-function scheduleCatalogoJaponHomeLazy() {
-  if (japanHomeLoadScheduled) return;
-  japanHomeLoadScheduled = true;
-  const start = () => { void loadCatalogoJaponHomeLazy(); };
-  if ('requestIdleCallback' in window) {
-    window.requestIdleCallback(start, { timeout:1000 });
-  } else {
-    window.setTimeout(start, 0);
-  }
-}
-
 async function fetchHomeFallbackProgressive() {
   const loadSection = async (accion, options, render) => {
     try {
@@ -466,13 +352,6 @@ function renderCachedHomeSections() {
 
 async function loadHome() {
   renderCachedHomeSections();
-  const cachedJapan = getCachedJapanJSON('catalogoJaponHome', {
-    ttl: API_CACHE_TTL.CATALOGO_PREVENTAS_JAPON,
-    cacheId: 'catalogo-japon-home-v3',
-    allowStale: true
-  });
-  const cachedJapanItems = normalizarLista(cachedJapan);
-  if (cachedJapanItems.length) renderCatalogoJaponHome(cachedJapanItems);
   const cached = getCachedJSON('homeData', {
     ttl: API_CACHE_TTL.HOME_DATA,
     cacheId: 'home-data-v5',
@@ -493,8 +372,6 @@ async function loadHome() {
   } catch (error) {
     console.warn('No se pudo cargar Home agregado; usando carga por secciones:', error);
     await fetchHomeFallbackProgressive();
-  } finally {
-    scheduleCatalogoJaponHomeLazy();
   }
 }
 
