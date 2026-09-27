@@ -330,15 +330,6 @@ function renderCachedHomeSections() {
         params: { page: 1, page_size: 24 }
       },
       render: data => renderPreventasHome(normalizarLista(data))
-    },
-    {
-      accion: 'pedidosDisponiblesPage',
-      options: {
-        ttl: API_CACHE_TTL.PEDIDOS_DISPONIBLES,
-        cacheId: 'pedidos-page-v3',
-        params: { page: 1, page_size: 24, sort: 'newest' }
-      },
-      render: data => renderPedidosHome(normalizarLista(data))
     }
   ];
 
@@ -382,7 +373,6 @@ function renderHome(data) {
   setupUltimas((data.ultimas || productosOrdenados).length ? data.ultimas : productosOrdenados);
   renderOfertas(ofertasOrdenadas);
   renderPreventasHome(data.preventas || []);
-  renderPedidosHome(data.pedidosDisponibles || []);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
