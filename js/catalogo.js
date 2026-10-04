@@ -242,6 +242,22 @@ function aplicarFiltros() {
   loadCatalogPage({ urlMode: 'replace' });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ---------------------------
 // INICIALIZACIÓN (SE DECLARA DESPUÉS DE LAS FUNCIONES QUE USA)
 // ---------------------------
@@ -325,6 +341,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   actualizarCarritoUI();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ---------------------------
 // FUNCIONES AUXILIARES
