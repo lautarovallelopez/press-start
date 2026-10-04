@@ -3,7 +3,7 @@ export const PUBLIC_API_URL = 'https://script.google.com/macros/s/AKfycbwyYBmqhF
 // Alias temporal para los modulos publicos existentes.
 export const API_URL = PUBLIC_API_URL;
 export const CARRITO_LOCAL_KEY = 'carritoMardant';
-export const PRODUCTOS_POR_PAGINA = 22;
+export const PRODUCTOS_POR_PAGINA = 21;
 export const WHATSAPP_NUMBER = '5491139473925';
 export const whatsappLink = (mensaje = '') =>
   `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
