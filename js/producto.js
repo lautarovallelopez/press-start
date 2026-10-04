@@ -1,5 +1,5 @@
 import { whatsappLink } from './config.js?v=5';
-import { API_CACHE_TTL, cachedFetchJSON } from './api-client.js?v=7';
+import { fetchJSON } from './api-client.js?v=7';
 import {
   agregarAlCarrito,
   actualizarCarritoUI,
@@ -42,14 +42,12 @@ async function loadProducto(){
   if (!id) return showError('Falta el parámetro <b>id</b> en el link del producto.');
 
   try{
-    const data = await cachedFetchJSON('producto', {
+     const data = await fetchJSON('producto', {
       params: { id },
-      ttl: API_CACHE_TTL.PRODUCTO,
-      cacheId: `producto:${id}`,
-      retries: 0,
+      retries: 1,
       timeoutMs: 12000
     });
-
+    
     if (!data || data.ok === false || !data.producto) {
       throw new Error(data?.error || 'not_found');
     }
@@ -57,7 +55,7 @@ async function loadProducto(){
     renderProducto(data.producto);
   }catch(err){
     console.error(err);
-    showError('No se pudo cargar el producto. Si el link es correcto, revisa que ya redeployaste el Apps Script.');
+    showError('Producto no encontrado o no se pudo cargar.');
   }
 }
 

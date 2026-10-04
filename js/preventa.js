@@ -67,7 +67,7 @@ async function loadPreventasPage({ urlMode = 'replace' } = {}) {
       timeoutMs: 12000,
       signal: controller.signal
     });
-    console.log(data);
+
     if (requestId !== preventasRequestId || controller.signal.aborted) return;
     if (!data?.ok || !Array.isArray(data.productos)) throw new Error(data?.error || 'preventas_page_unavailable');
 

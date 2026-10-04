@@ -256,7 +256,7 @@ async function loadHome() {
       retries: 1,
       timeoutMs: 12000
     });
-    console.log(data)
+
     if (!data?.ok) throw new Error(data?.error || 'home_data_unavailable');
     renderHome(data);
   } catch (error) {
