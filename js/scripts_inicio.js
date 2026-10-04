@@ -1,6 +1,6 @@
 // === js/scripts_inicio.js ===
 import { whatsappLink } from './config.js?v=5';
-import { API_CACHE_TTL, cachedFetchJSON, getCachedJSON } from './api-client.js?v=7';
+import { fetchJSON } from './api-client.js?v=7';
 import { actualizarCarritoUI } from './carrito-utils.js?v=2';
 
 const $ = (sel) => document.querySelector(sel);
@@ -249,120 +249,18 @@ function renderPedidosHome(lista) {
   });
 }
 
-async function fetchHomeFallbackProgressive() {
-  const loadSection = async (accion, options, render) => {
-    try {
-      const data = await cachedFetchJSON(accion, {
-        ...options,
-        staleWhileRevalidate: true,
-        retries: 0,
-        timeoutMs: 12000
-      });
-      render(data);
-      return true;
-    } catch (error) {
-      console.warn(`No se pudo actualizar la sección ${accion}:`, error);
-      return false;
-    }
-  };
-
-  // Dos carriles recuperan solo el contenido principal. Japón se carga después
-  // y nunca condiciona el resultado de este fallback.
-  const results = await Promise.all([
-    (async () => {
-      const latest = await loadSection('productosPage', {
-        ttl: API_CACHE_TTL.PRODUCTOS,
-        cacheId: 'productos-page-v3',
-        params: { page: 1, page_size: 15, sort: 'recientes', include_meta: '0' }
-      }, data => setupUltimas(normalizarLista(data)));
-      const offers = await loadSection('productosPage', {
-        ttl: API_CACHE_TTL.PRODUCTOS,
-        cacheId: 'productos-page-v3',
-        params: { page: 1, page_size: 30, sort: 'oferta', include_meta: '0' }
-      }, data => renderOfertas(normalizarLista(data)));
-      return latest || offers;
-    })(),
-    (async () => {
-      const presales = await loadSection('preventasPage', {
-        ttl: API_CACHE_TTL.PREVENTAS,
-        cacheId: 'preventas-page-v4',
-        params: { page: 1, page_size: 24 }
-      }, data => renderPreventasHome(normalizarLista(data)));
-      const orders = await loadSection('pedidosDisponiblesPage', {
-        ttl: API_CACHE_TTL.PEDIDOS_DISPONIBLES,
-        cacheId: 'pedidos-page-v3',
-        params: { page: 1, page_size: 24, sort: 'newest' }
-      }, data => renderPedidosHome(normalizarLista(data)));
-      return presales || orders;
-    })()
-  ]);
-
-  if (!results.some(Boolean)) {
-    throw new Error('No se pudo cargar ninguna sección de la portada');
-  }
-}
-
-function renderCachedHomeSections() {
-  const cachedSections = [
-    {
-      accion: 'productosPage',
-      options: {
-        ttl: API_CACHE_TTL.PRODUCTOS,
-        cacheId: 'productos-page-v3',
-        params: { page: 1, page_size: 15, sort: 'recientes', include_meta: '0' }
-      },
-      render: data => setupUltimas(normalizarLista(data))
-    },
-    {
-      accion: 'productosPage',
-      options: {
-        ttl: API_CACHE_TTL.PRODUCTOS,
-        cacheId: 'productos-page-v3',
-        params: { page: 1, page_size: 30, sort: 'oferta', include_meta: '0' }
-      },
-      render: data => renderOfertas(normalizarLista(data))
-    },
-    {
-      accion: 'preventasPage',
-      options: {
-        ttl: API_CACHE_TTL.PREVENTAS,
-        cacheId: 'preventas-page-v4',
-        params: { page: 1, page_size: 24 }
-      },
-      render: data => renderPreventasHome(normalizarLista(data))
-    }
-  ];
-
-  return cachedSections.reduce((rendered, section) => {
-    const data = getCachedJSON(section.accion, { ...section.options, allowStale: true });
-    if (!data) return rendered;
-    section.render(data);
-    return rendered + 1;
-  }, 0);
-}
-
 async function loadHome() {
-  renderCachedHomeSections();
-  const cached = getCachedJSON('homeData', {
-    ttl: API_CACHE_TTL.HOME_DATA,
-    cacheId: 'home-data-v5',
-    allowStale: true
-  });
-  if (cached?.ok) renderHome(cached);
-
   try {
-    const data = await cachedFetchJSON('homeData', {
-      ttl: API_CACHE_TTL.HOME_DATA,
-      cacheId: 'home-data-v5',
-      staleWhileRevalidate: true,
-      retries: 0,
+    const data = await fetchJSON('homeData', {
+      params: {},
+      retries: 1,
       timeoutMs: 12000
     });
+
     if (!data?.ok) throw new Error(data?.error || 'home_data_unavailable');
     renderHome(data);
   } catch (error) {
-    console.warn('No se pudo cargar Home agregado; usando carga por secciones:', error);
-    await fetchHomeFallbackProgressive();
+    console.error('Error cargando portada:', error);
   }
 }
 

@@ -1,6 +1,6 @@
 /* js/preventa.js */
 import { whatsappLink } from './config.js?v=5';
-import { API_CACHE_TTL, cachedFetchJSON, prefetchJSONPages } from './api-client.js?v=7';
+import { fetchJSON } from './api-client.js?v=7';
 import { actualizarCarritoUI } from './carrito-utils.js?v=2';
 import { buildShareUrl, shareIcon, shareVisualItem } from './social-actions.js?v=3';
 import { pageFromUrl, renderCatalogPagination, updateCatalogUrl } from './pagination-utils.js?v=2';
@@ -8,7 +8,6 @@ import { pageFromUrl, renderCatalogPagination, updateCatalogUrl } from './pagina
 const ITEMS_PER_PAGE = 21;
 let paginaActual = pageFromUrl();
 let totalPaginas = 1;
-let preventasGlobal = [];
 let preventasRequestController = null;
 let preventasRequestId = 0;
 
@@ -60,16 +59,15 @@ async function loadPreventasPage({ urlMode = 'replace' } = {}) {
   const requestedParams = { page: requestedPage, page_size: ITEMS_PER_PAGE };
   updateCatalogUrl({ pagina: paginaActual }, urlMode);
   $('#contenedor')?.setAttribute('aria-busy', 'true');
+
   try {
-    const data = await cachedFetchJSON('preventasPage', {
-      ttl: API_CACHE_TTL.PREVENTAS,
-      cacheId: 'preventas-page-v4',
+    const data = await fetchJSON('preventasPage', {
       params: requestedParams,
-      staleWhileRevalidate: true,
-      retries: 0,
+      retries: 1,
       timeoutMs: 12000,
       signal: controller.signal
     });
+
     if (requestId !== preventasRequestId || controller.signal.aborted) return;
     if (!data?.ok || !Array.isArray(data.productos)) throw new Error(data?.error || 'preventas_page_unavailable');
 
@@ -79,54 +77,17 @@ async function loadPreventasPage({ urlMode = 'replace' } = {}) {
       throw new Error('preventas_page_response_mismatch');
     }
 
-    preventasGlobal = data.productos;
     totalPaginas = responseTotalPages;
     paginaActual = responsePage;
-    render(preventasGlobal);
+    render(data.productos);
     renderPagination();
     updateCatalogUrl({ pagina: paginaActual }, 'replace');
 
-    prefetchJSONPages('preventasPage', {
-      current: paginaActual,
-      total: totalPaginas,
-      ahead: 3,
-      behind: 1,
-      ttl: API_CACHE_TTL.PREVENTAS,
-      params: requestedParams,
-      cacheId: 'preventas-page-v4',
-      signal: controller.signal
-    }).catch(() => {});
   } catch (error) {
     if (requestId !== preventasRequestId || controller.signal.aborted || error?.name === 'AbortError') return;
-    await loadPreventasFallback(error, { requestId, controller, requestedPage });
+    showErr(error);
   } finally {
     if (requestId === preventasRequestId) $('#contenedor')?.removeAttribute('aria-busy');
-  }
-}
-
-async function loadPreventasFallback(serverError, { requestId, controller, requestedPage } = {}) {
-  try {
-    const data = await cachedFetchJSON('preventas', {
-      ttl: API_CACHE_TTL.PREVENTAS,
-      cacheId: 'preventas-full-v4',
-      staleWhileRevalidate: true,
-      retries: 0,
-      timeoutMs: 12000
-    });
-    if (requestId !== preventasRequestId || controller?.signal.aborted) return;
-    if (!Array.isArray(data)) throw new Error('preventas_unavailable');
-
-    preventasGlobal = data.filter(item => String(item?.estado || '').toUpperCase().includes('PREVENTA'));
-    totalPaginas = Math.max(1, Math.ceil(preventasGlobal.length / ITEMS_PER_PAGE));
-    paginaActual = Math.min(requestedPage || 1, totalPaginas);
-    const start = (paginaActual - 1) * ITEMS_PER_PAGE;
-    render(preventasGlobal.slice(start, start + ITEMS_PER_PAGE));
-    renderPagination();
-    updateCatalogUrl({ pagina: paginaActual }, 'replace');
-    console.warn('Endpoint paginado no disponible; usando preventas compatibles:', serverError);
-  } catch (error) {
-    if (requestId !== preventasRequestId || controller?.signal.aborted || error?.name === 'AbortError') return;
-    showErr(error);
   }
 }
 
