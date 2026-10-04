@@ -1,6 +1,6 @@
 /* js/catalogo.js - Versión Final Corregida */
 import { PRODUCTOS_POR_PAGINA } from './config.js?v=5';
-import { API_CACHE_TTL, cachedFetchJSON, prefetchJSONPages } from './api-client.js?v=7';
+import { fetchJSON  } from './api-client.js?v=7';
 import { 
   agregarAlCarrito,
   actualizarCarritoUI,
@@ -40,64 +40,9 @@ function parseMoney(value) {
   return Number.isFinite(number) ? number : null;
 }
 
-function precioReal(p) {
-  const precio = parseMoney(p?.precio) ?? 0;
-  const oferta = parseMoney(p?.oferta);
-  return oferta !== null && oferta > 0 && oferta < precio ? oferta : precio;
-}
-
 function estaAgotado(p) {
   const estado = String(p?.estado || '').toUpperCase();
   return estado.includes('SIN STOCK') || estado.includes('AGOTADO');
-}
-
-// ---------------------------
-// FUNCIÓN PRINCIPAL DE FILTROS (DECLARADA PRIMERO)
-// ---------------------------
-function filtrarProductosLocales() {
-  const texto = ($('#buscador').value || '').toLowerCase();
-  const orden = $('#orden').value;
-  const estadoFiltro = $('#estado').value;
-  const subcat = subcategoriaActual.toLowerCase();
-  const precioMin = parseMoney($('#precio-min')?.value);
-  const precioMax = parseMoney($('#precio-max')?.value);
-
-  let lista = productosGlobal.filter((p) => {
-    const nombre = String(p.nombre || '').toLowerCase();
-    const categoria = String(p.categoria || '').toUpperCase();
-    const subcategoria = String(p.subcategoria || '').toLowerCase();
-    const catOK = !categoriaActual || categoria === categoriaActual;
-    const subOK = !subcat || subcategoria === subcat;
-    const txtOK = nombre.includes(texto) ||
-                  categoria.toLowerCase().includes(texto) ||
-                  subcategoria.includes(texto);
-
-    const isAgotado = estaAgotado(p);
-    const estadoOK = estadoFiltro === 'todos' ||
-                    (estadoFiltro === 'disponible' && !isAgotado) ||
-                    (estadoFiltro === 'agotado' && isAgotado);
-
-    const precio = precioReal(p);
-    const precioOK =
-      (precioMin === null || precio >= precioMin) &&
-      (precioMax === null || precio <= precioMax);
-
-    return catOK && subOK && txtOK && estadoOK && precioOK;
-  });
-
-  if (orden === 'oferta') {
-    lista = lista.filter(p => p.oferta && !isNaN(p.oferta));
-  }
-
-  switch (orden) {
-    case 'recientes':   lista.sort((a, b) => b.id - a.id); break;
-    case 'precio-asc':  lista.sort((a, b) => precioReal(a) - precioReal(b)); break;
-    case 'precio-desc': lista.sort((a, b) => precioReal(b) - precioReal(a)); break;
-    case 'nombre-az':   lista.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })); break;
-    case 'nombre-za':   lista.sort((a, b) => b.nombre.localeCompare(a.nombre, 'es', { sensitivity: 'base' })); break;
-  }
-
-  return lista;
 }
 
 function catalogParams() {
@@ -156,14 +101,12 @@ async function loadCatalogPage({ urlMode = 'replace' } = {}) {
   $('#contenedor')?.setAttribute('aria-busy', 'true');
 
   try {
-    const data = await cachedFetchJSON('productosPage', {
-      ttl: API_CACHE_TTL.PRODUCTOS,
+    const data = await fetchJSON('productosPage', {
       params: requestedParams,
-      cacheId: 'productos-page-v3',
-      staleWhileRevalidate: true,
-      retries: 0,
+      retries: 1,
       timeoutMs: 12000,
-      signal: controller.signal
+      signal: controller.signal,
+      abortUnderlying: true
     });
     if (requestId !== catalogRequestId || controller.signal.aborted) return;
     if (!data?.ok || !Array.isArray(data.productos)) throw new Error(data?.error || 'productos_page_unavailable');
@@ -186,53 +129,16 @@ async function loadCatalogPage({ urlMode = 'replace' } = {}) {
     renderPaginacion(totalPaginas);
     syncCatalogUrl('replace');
 
-    prefetchJSONPages('productosPage', {
-      current: paginaActual,
-      total: totalPaginas,
-      ahead: 3,
-      behind: 1,
-      ttl: API_CACHE_TTL.PRODUCTOS,
-      params: { ...requestedParams, include_meta: '0' },
-      cacheId: 'productos-page-v3',
-      signal: controller.signal
-    }).catch(() => {});
   } catch (error) {
     if (requestId !== catalogRequestId || controller.signal.aborted || error?.name === 'AbortError') return;
-    await loadCatalogFallback(error, { requestId, controller });
-  } finally {
-    if (requestId === catalogRequestId) $('#contenedor')?.removeAttribute('aria-busy');
-  }
-}
-
-async function loadCatalogFallback(serverError, { requestId, controller } = {}) {
-  try {
-    if (!productosGlobal.length) {
-      productosGlobal = await cachedFetchJSON('productos', {
-        ttl: API_CACHE_TTL.PRODUCTOS,
-        retries: 0,
-        timeoutMs: 12000
-      });
-    }
-    // Una descarga completa también puede terminar después de que el usuario
-    // ya cambió de página. En ese caso no debe volver a pintar datos antiguos.
-    if (requestId !== catalogRequestId || controller?.signal.aborted) return;
-    fillSubcategorias();
-    const lista = filtrarProductosLocales();
-    totalPaginas = Math.max(1, Math.ceil(lista.length / productosPorPagina));
-    paginaActual = Math.min(paginaActual, totalPaginas);
-    const start = (paginaActual - 1) * productosPorPagina;
-    renderProductos(lista.slice(start, start + productosPorPagina));
-    renderPaginacion(totalPaginas);
-    syncCatalogUrl('replace');
-    console.warn('Endpoint paginado no disponible; usando catalogo compatible:', serverError);
-  } catch (error) {
-    console.error('Error:', error);
     $('#contenedor').innerHTML = `
-      <div class="error-api">
-        <p>Error al cargar productos. Intenta recargar la pagina.</p>
-        <button onclick="location.reload()">Recargar</button>
+      <div class="error-api" style="text-align:center; padding:40px;">
+        <p>Error al cargar productos</p>
+        <button onclick="location.reload()">Reintentar</button>
       </div>
     `;
+  } finally {
+    if (requestId === catalogRequestId) $('#contenedor')?.removeAttribute('aria-busy');
   }
 }
 
