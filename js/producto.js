@@ -216,7 +216,7 @@ function actualizarBotonStock() {
     stockMaximo === null ||
     cantidad >= stockMaximo;
 
-  
+  addBtn.disabled = bloqueado;
 
   addBtn.textContent = bloqueado
     ? stockMaximo === 0
@@ -231,7 +231,6 @@ function actualizarBotonStock() {
   const addBtn = $('#pdp-add');
   actualizarBotonStock();
   addBtn.hidden = estaAgotado;
-  addBtn.disabled = (estadoTxt === 'AGOTADO');
   addBtn.dataset.trackAction = 'add_to_cart';
   addBtn.dataset.trackItemId = id;
   addBtn.dataset.trackItemName = nombre;

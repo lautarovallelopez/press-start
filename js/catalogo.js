@@ -519,9 +519,6 @@ ${tieneOferta ? `
 <div class="stock-indicador ${stockClase}">
   ${stockTexto}
 </div>
-
-  ${stockTexto}
-</div>
     <button class="agregar-carrito"
       data-track-action="add_to_cart"
       data-track-cta="Añadir al carrito"

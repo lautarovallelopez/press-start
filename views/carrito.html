@@ -145,6 +145,13 @@ function renderCarrito() {
 
     const subtotal = precioFinal * item.cantidad;
 
+const stockMaximo = obtenerStock(item);
+
+const limiteAlcanzado =
+  stockMaximo === null ||
+  item.cantidad >= stockMaximo;
+
+
     const div = document.createElement('div');
     div.className = 'carrito-item';
 
@@ -211,10 +218,7 @@ function renderCarrito() {
     contenedor.appendChild(div);
 
 
-const stockMaximo = obtenerStock(item);
-const limiteAlcanzado =
-  stockMaximo === null ||
-  item.cantidad >= stockMaximo;
+
 
   });
 
