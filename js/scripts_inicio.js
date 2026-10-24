@@ -123,7 +123,7 @@ function renderUltimas() {
     div.innerHTML = `
       <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
-      <div class="precio">S/. ${precio.toFixed(2)}</div>
+      <div class="precio">$ ${precio.toFixed(2)}</div>
       <div class="estado ${estadoClass(estado)}">${estado}</div>
       <a href="${whatsappLink(`Hola, quiero comprar ahora este producto: ${nombre}`)}"
          class="boton"
@@ -171,8 +171,8 @@ function renderOfertas(lista) {
       <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
       <div class="precio">
-        <span style="text-decoration:line-through;color:#bbb;">S/. ${precio.toFixed(2)}</span><br>
-        <span class="precio-oferta">S/. ${precioFinal.toFixed(2)}</span>
+        <span style="text-decoration:line-through;color:#bbb;">$ ${precio.toFixed(2)}</span><br>
+        <span class="precio-oferta">$ ${precioFinal.toFixed(2)}</span>
       </div>
       <div class="estado ${estadoClass(estadoTexto)}">${estadoTexto}</div>
       <a href="${whatsappLink(mensaje)}"
@@ -200,7 +200,7 @@ function renderPreventasHome(lista) {
     div.innerHTML = `
       <img src="${escapeHtml(img)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
-      <div class="precio">S/. ${precio.toFixed(2)}</div>
+      <div class="precio">$ ${precio.toFixed(2)}</div>
       <div class="estado estado-preventa">Llega: ${escapeHtml(llegada)}</div>
       <a href="${whatsappLink(`Hola, quiero reservar esta preventa con S/ 15: ${nombre}`)}"
          target="_blank"

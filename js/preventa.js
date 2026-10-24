@@ -128,7 +128,7 @@ function card(p) {
     : 'https://via.placeholder.com/300x300?text=Sin+imagen';
   const ref = p.id || p.nombre || 'preventa';
   const urlWA = whatsappLink(`Hola, quiero reservar esta preventa con S/ 15: ${nombreRaw}`);
-  const precio = `S/. ${(+p.precio || 0).toFixed(2)}`;
+  const precio = `$ ${(+p.precio || 0).toFixed(2)}`;
   const llegada = p['fecha aprox llegada argentina'] || 'Proximamente';
   const trackCategory = [p.categoria, p.subcategoria].filter(Boolean).join(' - ') || 'Preventa';
 
@@ -138,7 +138,7 @@ function card(p) {
     <img src="${img}" alt="${nombre}" class="img" loading="lazy" referrerpolicy="no-referrer">
     <div class="nombre">${nombre}</div>
     <div class="categoria">${escapeHtml(p.categoria || '')}${p.subcategoria ? ' - ' + escapeHtml(p.subcategoria) : ''}</div>
-    <div class="precio">S/. ${(+p.precio || 0).toFixed(2)}</div>
+    <div class="precio">$ ${(+p.precio || 0).toFixed(2)}</div>
     <div class="estado">Llega: ${escapeHtml(p['fecha aprox llegada argentina'] || 'Proximamente')}</div>
     <a href="${urlWA}"
        target="_blank"

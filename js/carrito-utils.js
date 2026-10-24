@@ -65,7 +65,7 @@ export function mostrarMiniCarrito() {
     info.append(document.createTextNode(nombre), document.createElement('br'));
 
     const strong = document.createElement('strong');
-    strong.textContent = `S/. ${Number(item.precio || 0).toFixed(2)} x ${cant}`;
+    strong.textContent = `$ ${Number(item.precio || 0).toFixed(2)} x ${cant}`;
     info.appendChild(strong);
 
     const btn = document.createElement('button');
@@ -82,7 +82,7 @@ export function mostrarMiniCarrito() {
   const total = carrito.reduce((s, p) => s + p.precio, 0);
   const tot   = document.createElement('div');
   tot.style   = 'color:#fff;text-align:right;margin-top:10px;font-weight:bold;';
-  tot.textContent = `🧾 Total: S/. ${total.toFixed(2)}`;
+  tot.textContent = `🧾 Total: $ ${total.toFixed(2)}`;
   mini.appendChild(tot);
 }
 

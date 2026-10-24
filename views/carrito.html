@@ -15,7 +15,7 @@
   <div class="carrito-container">
     <h1>🛒 Mi Carrito</h1>
     <div id="lista-carrito"></div>
-    <div class="total" id="total-carrito">Total: S/. 0.00</div>
+    <div class="total" id="total-carrito">Total: $ 0.00</div>
     <div class="finalizar">
       <a href="#" id="finalizar-compra" class="boton">✅ Finalizar compra por WhatsApp</a>
     </div>
@@ -72,14 +72,14 @@
           <img src="${escapeHtml(item.imagen)}" alt="${escapeHtml(item.nombre)}" referrerpolicy="no-referrer">
           <div class="carrito-info">
             <div class="nombre">${escapeHtml(item.nombre)}</div>
-            <div class="precio">S/. ${item.precio.toFixed(2)}</div>
+            <div class="precio">$ ${item.precio.toFixed(2)}</div>
           </div>
           <button class="eliminar" data-index="${index}" aria-label="Eliminar producto del carrito">✕</button>
         `;
         contenedor.appendChild(div);
       });
 
-      totalSpan.textContent = `Total: S/. ${total.toFixed(2)}`;
+      totalSpan.textContent = `Total: $ ${total.toFixed(2)}`;
     }
 
     document.addEventListener('click', (e) => {
@@ -131,27 +131,26 @@
         });
 
         lines.push(
-          `${i}) ${g.qty} x ${g.nombre} — S/. ${unit.toFixed(2)} c/u — Subtotal: S/. ${sub.toFixed(2)}`
+          `${i}) ${g.qty} x ${g.nombre} — $ ${unit.toFixed(2)} c/u — Subtotal: $ ${sub.toFixed(2)}`
         );
 
         // Link detalle solo si hay id
         if (g.id && String(g.id).trim()) {
-          const link = `${origin}/views/producto.html?id=${encodeURIComponent(String(g.id).trim())}`;
+          const link = `ID: ${encodeURIComponent(String(g.id).trim())}`;
           lines.push(`   ${link}`);
         }
 
         i++;
       }
+      console.log(groups.values())
 
       const mensaje = [
-        '¡Hola! Quiero hacer un pedido en Dale Start Argentina.',
+        '¡Hola! Quiero hacer un pedido en Dale Start Store.',
         '',
         'Mi pedido:',
         ...lines,
         '',
-        `TOTAL: S/. ${total.toFixed(2)}`,
-        '',
-        'Tipo de entrega: ¿Delivery o recojo en punto de entrega gratuito en Buenos Aires?'
+        `TOTAL: $ ${total.toFixed(2)}`
       ].join('\n');
 
       const clean = waCleanText(mensaje);

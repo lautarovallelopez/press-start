@@ -357,8 +357,8 @@ function cardProducto(p) {
     : estado === 'AGOTADO'
       ? 'estado-agotado'
       : 'estado-disponible';
-  const sharePrice = `S/. ${(tieneOferta ? ofertaNum : precioNum).toFixed(2)}`;
-  const shareOldPrice = tieneOferta ? `S/. ${precioNum.toFixed(2)}` : '';
+  const sharePrice = `$ ${(tieneOferta ? ofertaNum : precioNum).toFixed(2)}`;
+  const shareOldPrice = tieneOferta ? `$ ${precioNum.toFixed(2)}` : '';
   const shareNote = estado === 'AGOTADO'
     ? 'Producto agotado. Consulta si se puede volver a traer.'
     : estado === 'OFERTA'
@@ -383,13 +383,13 @@ function cardProducto(p) {
     <div class="precio">
       ${tieneOferta ? `
         <span style="text-decoration:line-through;color:#bbb;">
-          S/. ${precioNum.toFixed(2)}
+          $ ${precioNum.toFixed(2)}
         </span><br>
         <span style="color:#FFFF00;font-weight:bold;">
-          S/. ${ofertaNum.toFixed(2)}
+          $ ${ofertaNum.toFixed(2)}
         </span>` : 
         `<span style="color:#4caf50;font-weight:bold;">
-          S/. ${precioNum.toFixed(2)}
+          $ ${precioNum.toFixed(2)}
         </span>`}
     </div>
     <div class="estado ${estadoClass}">${estado}</div>
