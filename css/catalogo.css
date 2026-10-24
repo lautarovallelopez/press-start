@@ -478,3 +478,31 @@
   color: #777;
   background: #eee;
 }
+
+
+
+.producto .precio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.precio-anterior {
+  color: #999;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: line-through;
+}
+
+.precio-oferta {
+  color: #e6b800;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.precio-normal {
+  color: #168444;
+  font-weight: 900;
+}

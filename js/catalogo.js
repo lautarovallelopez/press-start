@@ -402,9 +402,19 @@ function cardProducto(p) {
 
   const nombre = escapeHtml(p.nombre);
   const img = escapeHtml(p.imagen);
-  const precioNum = parseFloat(p.precio) || 0;
-  const ofertaNum = parseFloat(p.oferta) || precioNum;
-  const tieneOferta = !isNaN(ofertaNum) && ofertaNum < precioNum;
+
+const precioNum = Number(p.precio) || 0;
+const ofertaNum = Number(p.oferta);
+
+const esOferta = String(p.etiqueta ?? '')
+  .trim()
+  .toUpperCase() === 'OFERTA';
+
+const tieneOferta = esOferta &&
+  Number.isFinite(ofertaNum) &&
+  ofertaNum > 0 &&
+  ofertaNum < precioNum;
+
   
   
 const stock = p.stock === null ||
@@ -447,7 +457,7 @@ if (!stockValido) {
   stockClase = 'stock-muchas';
 }
 
-  const estado = agotado ? 'AGOTADO' : (tieneOferta ? 'OFERTA' : 'DISPONIBLE');
+  const estado = agotado ? 'AGOTADO' : 'DISPONIBLE';
   const estadoClass = estado === 'OFERTA'
     ? 'estado-oferta'
     : estado === 'AGOTADO'
@@ -476,19 +486,30 @@ if (!stockValido) {
   card.innerHTML = `
     <img src="${img}" alt="${nombre}" class="img" loading="lazy" referrerpolicy="no-referrer">
     <div class="nombre" title="${nombre}">${nombre}</div>
-    <div class="precio">
-      ${tieneOferta ? `
-        <span style="text-decoration:line-through;color:#bbb;">
-          $ ${precioNum.toFixed(2)}
-        </span><br>
-        <span style="color:#FFFF00;font-weight:bold;">
-          $ ${ofertaNum.toFixed(2)}
-        </span>` : 
-        `<span style="color:#4caf50;font-weight:bold;">
-          $ ${precioNum.toFixed(2)}
-        </span>`}
-    </div>
-    <div class="stock-indicador ${stockClase}">
+    
+<div class="precio">
+  ${tieneOferta ? `
+    <span class="precio-anterior">
+      $ ${precioNum.toFixed(2)}
+    </span>
+    <span class="precio-oferta">
+      $ ${ofertaNum.toFixed(2)}
+    </span>
+  ` : `
+    <span class="precio-normal">
+      $ ${precioNum.toFixed(2)}
+    </span>
+  `}
+</div>
+
+${tieneOferta ? `
+  <div class="estado estado-oferta">OFERTA</div>
+` : ''}
+
+<div class="stock-indicador ${stockClase}">
+  ${stockTexto}
+</div>
+
   ${stockTexto}
 </div>
     <button class="agregar-carrito"

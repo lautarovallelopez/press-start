@@ -166,7 +166,11 @@ function renderProducto(p){
 
   const precioNum = parseFloat(p.precio) || 0;
   const ofertaNum = parseFloat(p.oferta);
-  const tieneOferta = !isNaN(ofertaNum) && ofertaNum > 0 && ofertaNum < precioNum;
+  const tieneOferta =
+  String(p.etiqueta ?? '').trim().toUpperCase() === 'OFERTA' &&
+  Number.isFinite(ofertaNum) &&
+  ofertaNum > 0 &&
+  ofertaNum < precioNum;
   const rawEstado = String(p.estado || '').toUpperCase();
   const estaAgotado = rawEstado.includes('SIN STOCK') || rawEstado.includes('AGOTADO');
 
