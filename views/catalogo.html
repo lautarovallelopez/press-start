@@ -21,7 +21,7 @@
   <!-- estilos globales -->
   <link rel="stylesheet" href="../css/estilos.css?v=19" />
   <!-- extras del catálogo -->
-  <link rel="stylesheet" href="../css/catalogo.css?v=12" />
+  <link rel="stylesheet" href="../css/catalogo.css?v=20" />
 
   <style>
     /* ====== AJUSTES LOCALES (sólo esta vista) ====== */
@@ -232,7 +232,22 @@
     </div>
 
     <!-- Productos + paginación -->
-    <div id="contenedor" class="grid"></div>
+    
+<div id="contenedor" class="grid">
+  <div class="catalogo-loading" role="status" aria-live="polite">
+    <div class="catalogo-spinner">
+      <span>DS</span>
+    </div>
+    <h3>Buscando productos...</h3>
+    <p>Estamos encontrando las mejores opciones para vos.</p>
+    <div class="catalogo-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+
     <div id="paginacion" class="catalog-pagination" aria-label="Paginas del catalogo"></div>
 
     <!-- Mini-carrito + contador -->
@@ -255,7 +270,7 @@
   </div>
 
   <!-- Lógica del catálogo -->
-  <script type="module" src="../js/catalogo.js?v=16"></script>
+  <script type="module" src="../js/catalogo.js?v=17"></script>
 
   <!-- Abrir imágenes del listado en el lightbox -->
   <script>

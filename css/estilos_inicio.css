@@ -627,3 +627,89 @@ html,body{
   display: none !important;
 } 
 
+
+/* ===== CARGANDO PRODUCTOS EN HOME ===== */
+
+.home-loading {
+  grid-column: 1 / -1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 45px 20px;
+  text-align: center;
+  background: #171411;
+  border: 1px solid rgba(244,208,111,.25);
+  border-radius: 16px;
+  color: #fff;
+}
+
+.home-loading-spinner {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 22px;
+  border: 5px solid rgba(244,208,111,.15);
+  border-top-color: #f4d06f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: home-spin 1.2s linear infinite;
+}
+
+.home-loading-spinner span {
+  color: #f4d06f;
+  font-weight: 900;
+  font-size: 19px;
+}
+
+.home-loading h3 {
+  color: #f4d06f;
+  font-size: 21px;
+  margin: 0 0 10px;
+}
+
+.home-loading p {
+  color: #ddd1c3;
+  font-size: 14px;
+  margin: 0;
+}
+
+.home-loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.home-loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a8322a;
+  animation: home-pulse 1.2s infinite ease-in-out;
+}
+
+.home-loading-dots span:nth-child(2) {
+  animation-delay: .2s;
+}
+
+.home-loading-dots span:nth-child(3) {
+  animation-delay: .4s;
+}
+
+@keyframes home-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes home-pulse {
+  0%, 60%, 100% { opacity: .3; transform: scale(.8); }
+  30% { opacity: 1; transform: scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-loading-spinner,
+  .home-loading-dots span {
+    animation: none;
+  }
+}
+
+

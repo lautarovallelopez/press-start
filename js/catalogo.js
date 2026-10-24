@@ -99,6 +99,7 @@ async function loadCatalogPage({ urlMode = 'replace' } = {}) {
   requestedParams.include_meta = subcategoryMetaKey === requestedMetaKey ? '0' : '1';
   syncCatalogUrl(urlMode);
   $('#contenedor')?.setAttribute('aria-busy', 'true');
+  mostrarCargaCatalogo();
 
   try {
     const data = await fetchJSON('productosPage', {
@@ -274,6 +275,29 @@ document.addEventListener('DOMContentLoaded', () => {
 // ---------------------------
 const $ = (s) => document.querySelector(s);
 
+
+function mostrarCargaCatalogo() {
+  const cont = $('#contenedor');
+  if (!cont) return;
+
+  cont.innerHTML = `
+    <div class="catalogo-loading" role="status" aria-live="polite">
+      <div class="catalogo-spinner">
+        <span>DS</span>
+      </div>
+      <h3>Buscando productos...</h3>
+      <p>Estamos encontrando las mejores opciones para vos.</p>
+
+      <div class="catalogo-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `;
+}
+
+
 const debounce = (func, delay = 300) => {
   let timeout;
   return (...args) => {
@@ -331,11 +355,43 @@ function renderProductos(arr) {
   const cont = $('#contenedor');
   cont.innerHTML = '';
 
-  if (!arr.length) {
-    cont.innerHTML = '<p>No hay productos que coincidan.</p>';
-    $('#paginacion').innerHTML = '';
-    return;
-  }
+  
+if (!arr.length) {
+  cont.innerHTML = `
+    <div class="catalogo-sin-resultados">
+      <div class="sin-resultados-icono" aria-hidden="true">
+        🔎
+      </div>
+
+      <h2>¡No encontramos coincidencias!</h2>
+
+      <p>
+        No hay productos que coincidan con tu búsqueda
+        o los filtros seleccionados.
+      </p>
+
+      <p class="sin-resultados-ayuda">
+        Probá con otro nombre, categoría o rango de precios.
+        ¡Seguro tenemos algo para vos!
+      </p>
+
+      <button type="button" id="ver-todos-productos"
+              class="sin-resultados-boton">
+        ↻ Ver todos los productos
+      </button>
+    </div>
+  `;
+
+  $('#paginacion').innerHTML = '';
+
+  document.getElementById('ver-todos-productos')
+    ?.addEventListener('click', () => {
+      window.location.href = './catalogo.html';
+    });
+
+  return;
+}
+
 
   arr.forEach(p => cont.appendChild(cardProducto(p)));
 }

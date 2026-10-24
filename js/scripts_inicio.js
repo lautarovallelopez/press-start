@@ -286,6 +286,7 @@ function renderPedidosHome(lista) {
   });
 }
 
+
 async function loadHome() {
   try {
     const data = await fetchJSON('homeData', {
@@ -294,12 +295,36 @@ async function loadHome() {
       timeoutMs: 12000
     });
 
-    if (!data?.ok) throw new Error(data?.error || 'home_data_unavailable');
+    if (!data?.ok) {
+      throw new Error(data?.error || 'home_data_unavailable');
+    }
+
     renderHome(data);
+
   } catch (error) {
     console.error('Error cargando portada:', error);
+
+    const cont = document.getElementById('ultimas-importaciones');
+
+    if (cont) {
+      cont.innerHTML = `
+        <div class="home-section-status is-error">
+          No pudimos cargar los productos en este momento.
+          <br>
+          <button type="button" id="reintentar-home" class="boton">
+            Reintentar
+          </button>
+        </div>
+      `;
+
+      document.getElementById('reintentar-home')
+        ?.addEventListener('click', () => {
+          location.reload();
+        });
+    }
   }
 }
+
 
 function renderHome(data) {
   const productosOrdenados = [...(data.productos || [])].sort((a, b) => Number(b.id ?? 0) - Number(a.id ?? 0));

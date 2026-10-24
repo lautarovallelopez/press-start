@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="../css/estilos.css?v=17" />
 
   <!-- 2) Estilos exclusivos de la portada (DEBEN ir después para pisar al global) -->
-  <link rel="stylesheet" href="../css/estilos_inicio.css?v=25">
+  <link rel="stylesheet" href="../css/estilos_inicio.css?v=26">
 </head>
 <body>
 <section id="vista-inicio">
@@ -45,7 +45,7 @@
   </nav>
 
   <!-- Carrusel -->
-  <div class="carrusel">
+  <div class="carrusel" hidden>
     <img src="https://i.imgur.com/D9qJpmt.png" class="activo" alt="Slide 1" loading="eager" fetchpriority="high" referrerpolicy="no-referrer">
     <img src="https://i.imgur.com/iFcP1c3.png"               alt="Slide 2" loading="lazy" decoding="async" referrerpolicy="no-referrer">
     <img src="https://i.imgur.com/YXrMQqw.png"               alt="Slide 3" loading="lazy" decoding="async" referrerpolicy="no-referrer">
@@ -77,7 +77,20 @@
         </span>
       </a>
     </div>
-    <div id="ultimas-importaciones" class="grid-productos"></div>
+    <div id="ultimas-importaciones" class="grid-productos">
+  <div class="home-loading" role="status" aria-live="polite">
+    <div class="home-loading-spinner">
+      <span>DS</span>
+    </div>
+    <h3>Cargando productos...</h3>
+    <p>Estamos preparando las novedades para vos.</p>
+    <div class="home-loading-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
   </section>
 
   <section class="seccion seccion-preventas" hidden>
@@ -112,7 +125,7 @@
 </section>
 
 <!-- Lógica de portada -->
-  <script type="module" src="../js/scripts_inicio.js?v=19"></script>
+  <script type="module" src="../js/scripts_inicio.js?v=20"></script>
 
 <!-- Lightbox para imágenes de cards -->
 <script>
