@@ -1,6 +1,5 @@
 // === js/config.js ===
-//export const PUBLIC_API_URL = 'https://script.google.com/macros/s/AKfycbwyYBmqhFJSTzyGG22IF2OaUQlbImTeTZY3WzBBngaDC8qU0mCBzEyXqesQyK-J1J3m/exec';
-export const PUBLIC_API_URL = 'https://script.google.com/macros/s/AKfycbykjhg8-enhHUhZ5lenHLQnBUzd8nmIDj7YW1ckgl_VapRcc497JPHK8mcuTaThIUUN/exec';
+export const PUBLIC_API_URL = 'https://script.google.com/macros/s/AKfycbwufJ7V1wQTlChCVPltZnXVDDGmW_SfB6jUbbDObU6tLyTj-MGv5KvSc6eylUsojwQ9Dw/exec';
 // Alias temporal para los modulos publicos existentes.
 export const API_URL = PUBLIC_API_URL;
 export const CARRITO_LOCAL_KEY = 'carritoMardant';
