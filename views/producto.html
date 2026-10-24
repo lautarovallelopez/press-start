@@ -18,7 +18,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
   <link rel="stylesheet" href="../css/estilos.css?v=17">
-  <link rel="stylesheet" href="../css/producto.css?v=11">
+  <link rel="stylesheet" href="../css/producto.css?v=12">
 </head>
 <body>
 
@@ -27,7 +27,19 @@
       <a class="pdp-back" href="./catalogo.html">← Volver al catálogo</a>
     </div>
 
-    <div id="pdp-error" class="pdp-error" style="display:none;"></div>
+    <!-- Indicador de carga -->
+<div id="pdp-loading" class="pdp-status" role="status" aria-live="polite">
+  <div class="pdp-spinner">
+    <span>DS</span>
+  </div>
+  <h2>Cargando producto...</h2>
+  <p>Estamos buscando toda la información para vos.</p>
+</div>
+
+<!-- Mensaje de error -->
+<div id="pdp-error" class="pdp-status pdp-error"
+     style="display:none;" role="alert">
+</div>
 
     <div id="pdp" class="pdp" style="display:none;">
       <div class="pdp-grid">
@@ -66,7 +78,7 @@
   </a>
   <div id="mini-carrito" class="mini-carrito"></div>
 
-  <script type="module" src="../js/producto.js?v=7"></script>
+  <script type="module" src="../js/producto.js?v=8"></script>
   <script type="module" src="../js/tracking.js?v=8"></script>
   <script type="module" src="../js/account-widget.js?v=5"></script>
 </body>

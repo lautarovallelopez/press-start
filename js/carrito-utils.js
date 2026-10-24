@@ -9,9 +9,19 @@ export function agregarAlCarrito(prod) {
 
   const oferta = Number(prod.oferta);
   const precioBase = Number(prod.precio);
-  const precioUnit = Number.isFinite(oferta) && oferta > 0 && oferta < precioBase
+  
+const esOferta = String(prod.etiqueta ?? '')
+  .trim()
+  .toUpperCase() === 'OFERTA';
+
+const precioUnit =
+  esOferta &&
+  Number.isFinite(oferta) &&
+  oferta > 0 &&
+  oferta < precioBase
     ? oferta
     : (Number.isFinite(precioBase) ? precioBase : 0);
+
 
   carrito.push({
     id: String(prod.id ?? '').trim(), // <-- NUEVO (para link detalle)

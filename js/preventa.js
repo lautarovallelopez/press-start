@@ -12,6 +12,29 @@ let preventasRequestController = null;
 let preventasRequestId = 0;
 
 const $ = (s) => document.querySelector(s);
+
+function mostrarCargaPreventas() {
+  const cont = $('#contenedor');
+  if (!cont) return;
+
+  cont.innerHTML = `
+    <div class="preventa-loading" role="status" aria-live="polite">
+      <div class="preventa-spinner">
+        <span>DS</span>
+      </div>
+
+      <h3>Cargando preventas...</h3>
+      <p>Estamos buscando las próximas novedades para vos.</p>
+
+      <div class="preventa-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  `;
+}
+
 const escapeHtml = (t) =>
   typeof t === 'string'
     ? t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -59,6 +82,7 @@ async function loadPreventasPage({ urlMode = 'replace' } = {}) {
   const requestedParams = { page: requestedPage, page_size: ITEMS_PER_PAGE };
   updateCatalogUrl({ pagina: paginaActual }, urlMode);
   $('#contenedor')?.setAttribute('aria-busy', 'true');
+  mostrarCargaPreventas();
 
   try {
     const data = await fetchJSON('preventasPage', {
