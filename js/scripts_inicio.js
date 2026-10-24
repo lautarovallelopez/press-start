@@ -152,9 +152,30 @@ function setupUltimas(lista) {
 function renderOfertas(lista) {
   const cont = $('#productos-oferta');
   if (!cont) return;
+
+  const seccion = cont.closest('.seccion-ofertas');
   cont.innerHTML = '';
 
-  elegirBloqueRotativo(lista, MAX_HOME_ITEMS, { modo: 'hora', clave: 'ofertas' }).forEach((p) => {
+  const ofertas = Array.isArray(lista)
+    ? lista.filter(p => {
+        const precio = Number(p.precio);
+        const oferta = Number(p.oferta);
+
+        return Number.isFinite(precio)
+          && precio > 0
+          && Number.isFinite(oferta)
+          && oferta > 0
+          && oferta < precio;
+      })
+    : [];
+
+  if (seccion) {
+    seccion.hidden = ofertas.length === 0;
+  }
+
+  if (!ofertas.length) return;
+
+  elegirBloqueRotativo(ofertas, MAX_HOME_ITEMS, { modo: 'hora', clave: 'ofertas' }).forEach((p) => {
     const nombre = String(p.nombre || '').trim();
     const precio = numberValue(p.precio);
     const oferta = numberValue(p.oferta);
@@ -187,9 +208,25 @@ function renderOfertas(lista) {
 function renderPreventasHome(lista) {
   const cont = $('#productos-preventa');
   if (!cont) return;
+
+  const seccion = cont.closest('.seccion-preventas');
   cont.innerHTML = '';
 
-  elegirBloqueRotativo(lista, MAX_HOME_ITEMS, { modo: 'hora', clave: 'preventas' }).forEach((p) => {
+  const preventas = Array.isArray(lista)
+    ? lista.filter(p =>
+        String(p.estado || '')
+          .toUpperCase()
+          .includes('PREVENTA')
+      )
+    : [];
+
+  if (seccion) {
+    seccion.hidden = preventas.length === 0;
+  }
+
+  if (!preventas.length) return;
+
+  elegirBloqueRotativo(preventas, MAX_HOME_ITEMS, { modo: 'hora', clave: 'preventas' }).forEach((p) => {
     const nombre = String(p.nombre || p.descripcion || 'Preventa Dale Start').trim();
     const img = String(p.imagen || '').trim() || 'https://via.placeholder.com/300x300?text=Sin+imagen';
     const precio = numberValue(p.precio);

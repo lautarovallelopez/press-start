@@ -9,7 +9,7 @@
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="../css/estilos.css?v=17">
+  <link rel="stylesheet" href="../css/estilos.css?v=18">
 </head>
 <body>
   <div class="carrito-container">
@@ -59,28 +59,84 @@
         .replace(/'/g, '&#039;');
     }
 
+    const DESCUENTO = 0.15;
+    const MINIMO_PRODUCTOS = 3;
+
+    function calcularPrecio(precio, cantidad) {
+      const original = Number(precio) || 0;
+      return cantidad >= MINIMO_PRODUCTOS
+        ? original * (1 - DESCUENTO)
+        : original;
+    }
+
+
     function renderCarrito() {
-      const carritoLocal = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
+      const carritoLocal = JSON.parse(
+        localStorage.getItem('carritoMardant') || '[]'
+      );
 
       contenedor.innerHTML = '';
-      const total = carritoLocal.reduce((sum, item) => sum + item.precio, 0);
+
+      const cantidad = carritoLocal.length;
+      const tieneDescuento = cantidad >= MINIMO_PRODUCTOS;
+
+      const totalOriginal = carritoLocal.reduce(
+        (sum, item) => sum + Number(item.precio || 0), 0
+      );
+
+      const totalFinal = calcularPrecio(totalOriginal, cantidad);
 
       carritoLocal.forEach((item, index) => {
+        const precioOriginal = Number(item.precio) || 0;
+        const precioFinal = calcularPrecio(precioOriginal, cantidad);
+
         const div = document.createElement('div');
         div.className = 'carrito-item';
+
         div.innerHTML = `
-          <img src="${escapeHtml(item.imagen)}" alt="${escapeHtml(item.nombre)}" referrerpolicy="no-referrer">
+          <img src="${escapeHtml(item.imagen)}"
+              alt="${escapeHtml(item.nombre)}"
+              referrerpolicy="no-referrer">
+
           <div class="carrito-info">
             <div class="nombre">${escapeHtml(item.nombre)}</div>
-            <div class="precio">$ ${item.precio.toFixed(2)}</div>
+
+            <div class="precio">
+              ${tieneDescuento ? `
+                <del class="precio-original">
+                  $ ${precioOriginal.toFixed(2)}
+                </del>
+                <span class="precio-descuento">
+                  $ ${precioFinal.toFixed(2)}
+                </span>
+                <small class="etiqueta-descuento">15% OFF</small>
+              ` : `
+                $ ${precioOriginal.toFixed(2)}
+              `}
+            </div>
           </div>
-          <button class="eliminar" data-index="${index}" aria-label="Eliminar producto del carrito">✕</button>
+
+          <button class="eliminar"
+                  data-index="${index}"
+                  aria-label="Eliminar producto del carrito">✕</button>
         `;
+
         contenedor.appendChild(div);
       });
 
-      totalSpan.textContent = `Total: $ ${total.toFixed(2)}`;
+      totalSpan.innerHTML = tieneDescuento
+        ? `
+          <div>
+            <del class="precio-original">
+              $ ${totalOriginal.toFixed(2)}
+            </del>
+          </div>
+          <div>Total con 15% OFF: $ ${totalFinal.toFixed(2)}</div>
+          <small>Ahorrás $ ${(totalOriginal - totalFinal).toFixed(2)}</small>
+        `
+        : `Total: $ ${totalOriginal.toFixed(2)}`;
     }
+
 
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('eliminar')) {
@@ -98,6 +154,8 @@
       e.preventDefault();
 
       const cart = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
+      const cantidad = cart.length;
+      const tieneDescuento = cantidad >= MINIMO_PRODUCTOS;
       if (!cart.length) return;
 
       // Agrupar por id (si existe) o por nombre
@@ -119,20 +177,30 @@
       let i = 1;
       const trackingItems = [];
       for (const g of groups.values()) {
+        
         const unit = Number(g.precio) || 0;
-        const sub  = unit * g.qty;
+        const precioFinal = calcularPrecio(unit, cantidad);
+        const sub = precioFinal * g.qty;
+
         total += sub;
+
         trackingItems.push({
           item_id: g.id ? String(g.id).trim() : '',
           item_name: g.nombre || 'Producto Dale Start',
           item_category: 'catalogo',
-          price: unit,
+          price: precioFinal,
           quantity: g.qty
         });
 
         lines.push(
-          `${i}) ${g.qty} x ${g.nombre} — $ ${unit.toFixed(2)} c/u — Subtotal: $ ${sub.toFixed(2)}`
+          tieneDescuento
+            ? `${i}) ${g.qty} x ${g.nombre}\n` +
+              `   Antes: ~${unit.toFixed(2)}~ c/u\n` +
+              `   Ahora: $ ${precioFinal.toFixed(2)} c/u (15% OFF)\n` +
+              `   Subtotal: $ ${sub.toFixed(2)}`
+            : `${i}) ${g.qty} x ${g.nombre} — $ ${unit.toFixed(2)} c/u — Subtotal: $ ${sub.toFixed(2)}`
         );
+
 
         // Link detalle solo si hay id
         if (g.id && String(g.id).trim()) {
@@ -142,7 +210,9 @@
 
         i++;
       }
-      console.log(groups.values())
+      const totalOriginal = cart.reduce(
+        (sum, item) => sum + (Number(item.precio) || 0), 0
+      );
 
       const mensaje = [
         '¡Hola! Quiero hacer un pedido en Dale Start Store.',
@@ -150,7 +220,12 @@
         'Mi pedido:',
         ...lines,
         '',
-        `TOTAL: $ ${total.toFixed(2)}`
+        ...(tieneDescuento ? [
+          `Total original: ~${totalOriginal.toFixed(2)}~`,
+          'Descuento por 3 o más productos: 15%',
+          `Ahorro: $ ${(totalOriginal - total).toFixed(2)}`
+        ] : []),
+        `TOTAL A PAGAR: $ ${total.toFixed(2)}`
       ].join('\n');
 
       const clean = waCleanText(mensaje);

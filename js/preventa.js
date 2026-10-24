@@ -112,11 +112,34 @@ function render(lista = []) {
   const clean = (s) => (s || '').toUpperCase().replace(/\u00A0/g,' ').trim();
   const preventas = lista.filter(p => clean(p.estado).includes('PREVENTA'));
 
+ 
   if (!preventas.length) {
-    cont.innerHTML = '<p>No hay productos en preventa en este momento.</p>';
+    cont.innerHTML = `
+      <div class="preventa-vacia">
+        <div class="preventa-vacia-icono">📦</div>
+
+        <h2>¡Próximamente nuevas preventas!</h2>
+
+        <p>
+          Por el momento no tenemos preventas disponibles,
+          pero estamos preparando nuevas novedades para vos.
+        </p>
+
+        <p class="preventa-vacia-subtitulo">
+          ¡Mientras tanto, descubrí todos los productos
+          que tenemos en nuestro catálogo!
+        </p>
+
+        <a href="./catalogo.html" class="btn-pill">
+          🛍️ Explorar catálogo
+        </a>
+      </div>
+    `;
+
     $('#paginacion').innerHTML = '';
     return;
   }
+
   preventas.forEach(p => cont.appendChild(card(p)));
 }
 

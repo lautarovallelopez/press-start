@@ -63,7 +63,7 @@ async function fetchWithTimeout(
 
   if (signal?.aborted) controller.abort();
   else signal?.addEventListener('abort', abortRequest, { once: true });
-
+  console.log(url)
   try {
     const response = await fetch(url, {
       ...fetchOptions,

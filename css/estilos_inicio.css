@@ -622,5 +622,8 @@ html,body{
 .titulo-link{color:#000;font-weight:bold;text-decoration:none;display:inline-block;transition:transform .2s ease,color .2s ease}
 .titulo-link:hover{transform:scale(1.05);color:#e91e63;text-decoration:none}
 
-
+.seccion-preventas[hidden],
+.seccion-ofertas[hidden] {
+  display: none !important;
+} 
 
