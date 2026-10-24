@@ -37,34 +37,91 @@ function initMiniCarritoHover(){
   );
 }
 
-async function loadProducto(){
-  const id = new URLSearchParams(location.search).get('id');
-  if (!id) return showError('Falta el parámetro <b>id</b> en el link del producto.');
 
-  try{
-     const data = await fetchJSON('producto', {
+async function loadProducto() {
+  const id = new URLSearchParams(location.search).get('id');
+
+  if (!id || !id.trim()) {
+    showError('not-found');
+    return;
+  }
+
+  try {
+    const data = await fetchJSON('producto', {
       params: { id },
       retries: 1,
       timeoutMs: 12000
     });
-    
-    if (!data || data.ok === false || !data.producto) {
-      throw new Error(data?.error || 'not_found');
+
+    if (!data?.ok || !data.producto) {
+      if (data?.error === 'not_found' || data?.error === 'producto_no_encontrado') {
+        showError('not-found');
+      } else if (data?.ok && !data.producto) {
+        showError('not-found');
+      } else {
+        showError('connection');
+      }
+      return;
     }
 
     renderProducto(data.producto);
-  }catch(err){
-    console.error(err);
-    showError('Producto no encontrado o no se pudo cargar.');
+
+  } catch (error) {
+    console.error('Error cargando producto:', error);
+    showError('connection');
   }
 }
 
-function showError(html){
+
+
+function showError(tipo = 'not-found') {
+  const loading = $('#pdp-loading');
   const box = $('#pdp-error');
-  box.innerHTML = `⚠️ ${html}`;
-  box.style.display = 'block';
+
+  loading.style.display = 'none';
   $('#pdp').style.display = 'none';
+
+  const esConexion = tipo === 'connection';
+
+  box.innerHTML = `
+    <div class="pdp-status-icon" aria-hidden="true">
+      ${esConexion ? '⚠️' : '📦'}
+    </div>
+
+    <h2>
+      ${esConexion
+        ? '¡No pudimos cargar el producto!'
+        : '¡No encontramos este producto!'}
+    </h2>
+
+    <p>
+      ${esConexion
+        ? 'Hubo un problema al consultar la información. Podés intentar nuevamente.'
+        : 'El producto que buscás no está disponible o el enlace es incorrecto.'}
+    </p>
+
+    <div class="pdp-status-actions">
+      ${esConexion ? `
+        <button type="button" class="pdp-status-btn pdp-retry">
+          ↻ Reintentar
+        </button>
+      ` : ''}
+
+      <a href="./catalogo.html" class="pdp-status-btn">
+        🛍️ Volver al catálogo
+      </a>
+    </div>
+  `;
+
+  box.style.display = 'block';
+
+  box.querySelector('.pdp-retry')?.addEventListener('click', () => {
+    box.style.display = 'none';
+    loading.style.display = 'block';
+    loadProducto();
+  });
 }
+
 
 function setMeta(selector, value) {
   const el = document.head.querySelector(selector);
@@ -99,6 +156,7 @@ function updateProductMetadata({ nombre, id, categoria }) {
 }
 
 function renderProducto(p){
+  $('#pdp-loading').style.display = 'none';
   $('#pdp-error').style.display = 'none';
   $('#pdp').style.display = 'block';
 
