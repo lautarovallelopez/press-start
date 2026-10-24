@@ -5,7 +5,9 @@ import {
   agregarAlCarrito,
   actualizarCarritoUI,
   mostrarMiniCarrito,
-  actualizarContador
+  actualizarContador,
+  obtenerStock,
+cantidadEnCarrito
 } from './carrito-utils.js?v=2';
 import { buildShareUrl, shareIcon, shareVisualItem } from './social-actions.js?v=3';
 import { setupSearchTracking } from './search-tracking.js?v=5';
@@ -423,6 +425,14 @@ const stock = p.stock === null ||
   ? null
   : Number(p.stock);
 
+const stockMaximo = obtenerStock(p);
+const cantidadActual = cantidadEnCarrito(p);
+
+const limiteAlcanzado =
+  stockMaximo === null ||
+  cantidadActual >= stockMaximo;
+
+
 const stockValido = stock !== null &&
                     Number.isInteger(stock) &&
                     stock >= 0;
@@ -516,8 +526,12 @@ ${tieneOferta ? `
       data-track-action="add_to_cart"
       data-track-cta="Añadir al carrito"
       ${trackBase}
-      ${estado === 'AGOTADO' ? 'disabled' : ''}>
-      Añadir al carrito
+      ${limiteAlcanzado ? 'disabled' : ''}>
+      ${limiteAlcanzado
+  ? (stockMaximo === 0 ? 'Agotado' :
+     stockMaximo === null ? 'Stock no disponible' :
+     'Stock máximo alcanzado')
+  : 'Añadir al carrito'}
     </button>
     <a class="boton ver-detalle"
       href="./producto.html?id=${encodeURIComponent(p.id)}"
@@ -550,13 +564,27 @@ ${tieneOferta ? `
   `;
 
   if (estado !== 'AGOTADO') {
-    card.querySelector('.agregar-carrito').onclick = () => {
-      agregarAlCarrito({
-        ...p,
-        precio: tieneOferta ? ofertaNum : precioNum
-      });
-      actualizarContador();
-    };
+    
+const addBtn = card.querySelector('.agregar-carrito');
+
+addBtn.onclick = () => {
+  const agregado = agregarAlCarrito({
+    ...p,
+    precio: tieneOferta ? ofertaNum : precioNum
+  });
+
+  if (!agregado) return;
+
+  actualizarContador();
+
+  const cantidad = cantidadEnCarrito(p);
+
+  if (stockMaximo !== null && cantidad >= stockMaximo) {
+    addBtn.disabled = true;
+    addBtn.textContent = 'Stock máximo alcanzado';
+  }
+};
+
   }
 
   return card;

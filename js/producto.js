@@ -5,7 +5,9 @@ import {
   actualizarCarritoUI,
   mostrarMiniCarrito,
   actualizarContador,
-  notificar
+  notificar,
+  cantidadEnCarrito,
+  obtenerStock
 } from './carrito-utils.js?v=2';
 
 const $ = (s) => document.querySelector(s);
@@ -205,8 +207,29 @@ function renderProducto(p){
     precioEl.textContent = `$ ${precioFinal.toFixed(2)}`;
   }
 
+const stockMaximo = obtenerStock(p);
+
+function actualizarBotonStock() {
+  const cantidad = cantidadEnCarrito(p);
+
+  const bloqueado =
+    stockMaximo === null ||
+    cantidad >= stockMaximo;
+
+  
+
+  addBtn.textContent = bloqueado
+    ? stockMaximo === 0
+      ? 'Agotado'
+      : stockMaximo === null
+        ? 'Stock no disponible'
+        : 'Stock máximo alcanzado'
+    : '🛒 Añadir al carrito';
+}
+
   // Botón carrito
   const addBtn = $('#pdp-add');
+  actualizarBotonStock();
   addBtn.hidden = estaAgotado;
   addBtn.disabled = (estadoTxt === 'AGOTADO');
   addBtn.dataset.trackAction = 'add_to_cart';
@@ -216,12 +239,21 @@ function renderProducto(p){
   addBtn.dataset.trackCategory = categoria;
   addBtn.dataset.trackSource = 'producto_detalle';
   addBtn.dataset.trackCta = 'Añadir al carrito';
-  addBtn.onclick = () => {
-    if (estaAgotado) return;
-    agregarAlCarrito({ ...p, precio: precioFinal });
-    actualizarContador();
-    notificar('✅ Producto añadido al carrito', 'success');
-  };
+  
+addBtn.onclick = () => {
+  if (estaAgotado) return;
+
+  const agregado = agregarAlCarrito({
+    ...p,
+    precio: precioFinal
+  });
+
+  if (!agregado) return;
+
+  actualizarContador();
+  actualizarBotonStock();
+};
+
 
   // Copy link
   $('#pdp-copy').hidden = estaAgotado;
