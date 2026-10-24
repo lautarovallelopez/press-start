@@ -406,7 +406,47 @@ function cardProducto(p) {
   const ofertaNum = parseFloat(p.oferta) || precioNum;
   const tieneOferta = !isNaN(ofertaNum) && ofertaNum < precioNum;
   
-  const agotado = estaAgotado(p);
+  
+const stock = p.stock === null ||
+              p.stock === undefined ||
+              p.stock === ''
+  ? null
+  : Number(p.stock);
+
+const stockValido = stock !== null &&
+                    Number.isInteger(stock) &&
+                    stock >= 0;
+
+const agotado = stockValido
+  ? stock === 0
+  : estaAgotado(p);
+
+let stockTexto = '';
+let stockClase = '';
+
+if (!stockValido) {
+  stockTexto = agotado
+    ? 'Sin unidades disponibles'
+    : 'Consultar disponibilidad';
+  stockClase = agotado ? 'stock-cero' : 'stock-desconocido';
+
+} else if (stock === 0) {
+  stockTexto = 'Sin unidades disponibles';
+  stockClase = 'stock-cero';
+
+} else if (stock === 1) {
+  stockTexto = '¡Última unidad!';
+  stockClase = 'stock-uno';
+
+} else if (stock <= 5) {
+  stockTexto = `¡Últimas ${stock} unidades!`;
+  stockClase = 'stock-pocas';
+
+} else {
+  stockTexto = `${stock} unidades disponibles`;
+  stockClase = 'stock-muchas';
+}
+
   const estado = agotado ? 'AGOTADO' : (tieneOferta ? 'OFERTA' : 'DISPONIBLE');
   const estadoClass = estado === 'OFERTA'
     ? 'estado-oferta'
@@ -448,7 +488,9 @@ function cardProducto(p) {
           $ ${precioNum.toFixed(2)}
         </span>`}
     </div>
-    <div class="estado ${estadoClass}">${estado}</div>
+    <div class="stock-indicador ${stockClase}">
+  ${stockTexto}
+</div>
     <button class="agregar-carrito"
       data-track-action="add_to_cart"
       data-track-cta="Añadir al carrito"

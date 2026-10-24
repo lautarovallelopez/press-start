@@ -431,3 +431,50 @@
     font-size: 22px;
   }
 }
+
+
+/* ===== STOCK DE PRODUCTOS ===== */
+
+.stock-indicador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  text-align: center;
+  padding: 6px 12px;
+  margin: 0 auto 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.4;
+}
+
+/* 0 unidades: rojo */
+.stock-cero {
+  color: #e53935;
+  background: #fde8e7;
+}
+
+/* 1 unidad: naranja fuerte */
+.stock-uno {
+  color: #d65a00;
+  background: #fff0e0;
+}
+
+/* 2 a 5 unidades: amarillo */
+.stock-pocas {
+  color: #806000;
+  background: #fff2ad;
+}
+
+/* 6 o más unidades: verde */
+.stock-muchas {
+  color: #168444;
+  background: #e3f5e8;
+}
+
+/* Sin información de stock */
+.stock-desconocido {
+  color: #777;
+  background: #eee;
+}
