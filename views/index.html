@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="../css/estilos.css?v=17" />
 
   <!-- 2) Estilos exclusivos de la portada (DEBEN ir después para pisar al global) -->
-  <link rel="stylesheet" href="../css/estilos_inicio.css?v=24">
+  <link rel="stylesheet" href="../css/estilos_inicio.css?v=26">
 </head>
 <body>
 <section id="vista-inicio">
@@ -28,7 +28,7 @@
 
   <!-- Banner superior -->
   <header class="banner">
-    <img src="https://i.imgur.com/wfOe9n4.png"
+    <img src="https://ik.imagekit.io/jfkdopkcp/pressStartImages/bannerBienvenida.png?updatedAt=1792869804104"
          alt="Banner Anime Dale Start"
          loading="eager" fetchpriority="high" referrerpolicy="no-referrer">
     <div class="bienvenida"></div> <!-- eliminar -->
@@ -45,7 +45,7 @@
   </nav>
 
   <!-- Carrusel -->
-  <div class="carrusel">
+  <div class="carrusel" hidden>
     <img src="https://i.imgur.com/D9qJpmt.png" class="activo" alt="Slide 1" loading="eager" fetchpriority="high" referrerpolicy="no-referrer">
     <img src="https://i.imgur.com/iFcP1c3.png"               alt="Slide 2" loading="lazy" decoding="async" referrerpolicy="no-referrer">
     <img src="https://i.imgur.com/YXrMQqw.png"               alt="Slide 3" loading="lazy" decoding="async" referrerpolicy="no-referrer">
@@ -54,7 +54,7 @@
 
   <!-- Secciones -->
   
-  <section class="seccion seccion-ofertas">
+  <section class="seccion seccion-ofertas" hidden>
     <div class="home-section-head">
       <a href="./catalogo.html?orden=oferta" class="titulo-link home-title-link">
         <span class="section-icon" aria-hidden="true">特価</span>
@@ -73,19 +73,32 @@
         <span class="section-icon" aria-hidden="true">新着</span>
         <span class="section-title-copy">
           <span class="section-kicker">NUEVOS PRODUCTOS</span>
-          <span class="section-title">ÚLTIMAS IMPORTACIONES</span>
+          <span class="section-title">ÚLTIMOS INGRESOS</span>
         </span>
       </a>
     </div>
-    <div id="ultimas-importaciones" class="grid-productos"></div>
+    <div id="ultimas-importaciones" class="grid-productos">
+  <div class="home-loading" role="status" aria-live="polite">
+    <div class="home-loading-spinner">
+      <span>DS</span>
+    </div>
+    <h3>Cargando productos...</h3>
+    <p>Estamos preparando las novedades para vos.</p>
+    <div class="home-loading-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
   </section>
 
-  <section class="seccion seccion-preventas">
+  <section class="seccion seccion-preventas" hidden>
     <div class="home-section-head">
       <a href="./preventa.html" class="titulo-link home-title-link">
         <span class="section-icon" aria-hidden="true">予約</span>
         <span class="section-title-copy">
-          <span class="section-kicker">RESERVA DESDE S/ 15</span>
+          <span class="section-kicker">RESERVÁ AL MEJOR PRECIO</span>
           <span class="section-title">PREVENTAS</span>
         </span>
       </a>
@@ -112,7 +125,7 @@
 </section>
 
 <!-- Lógica de portada -->
-  <script type="module" src="../js/scripts_inicio.js?v=17"></script>
+  <script type="module" src="../js/scripts_inicio.js?v=20"></script>
 
 <!-- Lightbox para imágenes de cards -->
 <script>

@@ -112,11 +112,34 @@ function render(lista = []) {
   const clean = (s) => (s || '').toUpperCase().replace(/\u00A0/g,' ').trim();
   const preventas = lista.filter(p => clean(p.estado).includes('PREVENTA'));
 
+ 
   if (!preventas.length) {
-    cont.innerHTML = '<p>No hay productos en preventa en este momento.</p>';
+    cont.innerHTML = `
+      <div class="preventa-vacia">
+        <div class="preventa-vacia-icono">📦</div>
+
+        <h2>¡Próximamente nuevas preventas!</h2>
+
+        <p>
+          Por el momento no tenemos preventas disponibles,
+          pero estamos preparando nuevas novedades para vos.
+        </p>
+
+        <p class="preventa-vacia-subtitulo">
+          ¡Mientras tanto, descubrí todos los productos
+          que tenemos en nuestro catálogo!
+        </p>
+
+        <a href="./catalogo.html" class="btn-pill">
+          🛍️ Explorar catálogo
+        </a>
+      </div>
+    `;
+
     $('#paginacion').innerHTML = '';
     return;
   }
+
   preventas.forEach(p => cont.appendChild(card(p)));
 }
 
@@ -128,7 +151,7 @@ function card(p) {
     : 'https://via.placeholder.com/300x300?text=Sin+imagen';
   const ref = p.id || p.nombre || 'preventa';
   const urlWA = whatsappLink(`Hola, quiero reservar esta preventa con S/ 15: ${nombreRaw}`);
-  const precio = `S/. ${(+p.precio || 0).toFixed(2)}`;
+  const precio = `$ ${(+p.precio || 0).toFixed(2)}`;
   const llegada = p['fecha aprox llegada argentina'] || 'Proximamente';
   const trackCategory = [p.categoria, p.subcategoria].filter(Boolean).join(' - ') || 'Preventa';
 
@@ -138,7 +161,7 @@ function card(p) {
     <img src="${img}" alt="${nombre}" class="img" loading="lazy" referrerpolicy="no-referrer">
     <div class="nombre">${nombre}</div>
     <div class="categoria">${escapeHtml(p.categoria || '')}${p.subcategoria ? ' - ' + escapeHtml(p.subcategoria) : ''}</div>
-    <div class="precio">S/. ${(+p.precio || 0).toFixed(2)}</div>
+    <div class="precio">$ ${(+p.precio || 0).toFixed(2)}</div>
     <div class="estado">Llega: ${escapeHtml(p['fecha aprox llegada argentina'] || 'Proximamente')}</div>
     <a href="${urlWA}"
        target="_blank"

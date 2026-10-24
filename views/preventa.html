@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Preventas Dale Start | Reserva productos anime desde S/ 15</title>
   <meta name="description" content="Reserva productos oficiales de anime antes de su llegada a Argentina. Preventas disponibles con reserva desde S/ 15.">
   <link rel="canonical" href="https://dalestart.com.ar/views/preventa.html">
@@ -11,11 +11,11 @@
   <meta property="og:description" content="Reserva productos oficiales de anime antes de su llegada a Argentina. Preventas disponibles con reserva desde S/ 15.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dalestart.com.ar/views/preventa.html">
-  <meta property="og:image" content="https://i.imgur.com/ZMGeepN.png">
+  <meta property="og:image" content="https://ik.imagekit.io/jfkdopkcp/pressStartImages/bannerPreventa.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Preventas Dale Start | Reserva productos anime desde S/ 15">
   <meta name="twitter:description" content="Reserva productos oficiales de anime antes de su llegada a Argentina. Preventas disponibles con reserva desde S/ 15.">
-  <meta name="twitter:image" content="https://i.imgur.com/ZMGeepN.png">
+  <meta name="twitter:image" content="https://ik.imagekit.io/jfkdopkcp/pressStartImages/bannerPreventa.png">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
   <!-- hoja de estilos global -->
@@ -133,6 +133,61 @@
       font-weight:900;
     }
 
+/* Estado sin preventas */
+.preventa-vacia {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 650px;
+  margin: 30px auto 70px;
+  padding: 45px 30px;
+  box-sizing: border-box;
+  background: #141414;
+  border: 1px solid rgba(244,208,111,.25);
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+
+.preventa-vacia-icono {
+  font-size: 58px;
+  margin-bottom: 20px;
+}
+
+.preventa-vacia h2 {
+  color: #f0c766;
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+.preventa-vacia p {
+  color: #eee;
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.preventa-vacia-subtitulo {
+  color: #c8bbaa !important;
+  font-size: 14px !important;
+}
+
+.preventa-vacia .btn-pill {
+  margin-top: 15px;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .preventa-vacia {
+    padding: 35px 20px;
+    margin: 15px auto 45px;
+  }
+
+  .preventa-vacia h2 {
+    font-size: 22px;
+  }
+}
+
+
     /* --------- Responsivo --------- */
     @media (max-width:1100px){
       .grid-preventa{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
@@ -170,7 +225,7 @@
   <h1 class="sr-only">Preventas Dale Start Argentina de productos anime oficiales</h1>
 
   <!-- Banner superior -->
-  <img src="https://i.imgur.com/ZMGeepN.png"
+  <img src="https://ik.imagekit.io/jfkdopkcp/pressStartImages/bannerPreventa.png"
        alt="Preventa Dale Start"
        style="width:100%;max-height:200px;object-fit:cover;border-bottom:3px solid #a8322a;" referrerpolicy="no-referrer" />
 
@@ -208,7 +263,7 @@
   </div>
 
   <!-- Lógica de la página -->
-  <script type="module" src="../js/preventa.js?v=11"></script>
+  <script type="module" src="../js/preventa.js?v=12"></script>
 
   <!-- Lightbox: abrir al tocar cualquier imagen -->
   <script>

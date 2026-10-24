@@ -123,7 +123,7 @@ function renderUltimas() {
     div.innerHTML = `
       <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
-      <div class="precio">S/. ${precio.toFixed(2)}</div>
+      <div class="precio">$ ${precio.toFixed(2)}</div>
       <div class="estado ${estadoClass(estado)}">${estado}</div>
       <a href="${whatsappLink(`Hola, quiero comprar ahora este producto: ${nombre}`)}"
          class="boton"
@@ -152,9 +152,30 @@ function setupUltimas(lista) {
 function renderOfertas(lista) {
   const cont = $('#productos-oferta');
   if (!cont) return;
+
+  const seccion = cont.closest('.seccion-ofertas');
   cont.innerHTML = '';
 
-  elegirBloqueRotativo(lista, MAX_HOME_ITEMS, { modo: 'hora', clave: 'ofertas' }).forEach((p) => {
+  const ofertas = Array.isArray(lista)
+    ? lista.filter(p => {
+        const precio = Number(p.precio);
+        const oferta = Number(p.oferta);
+
+        return Number.isFinite(precio)
+          && precio > 0
+          && Number.isFinite(oferta)
+          && oferta > 0
+          && oferta < precio;
+      })
+    : [];
+
+  if (seccion) {
+    seccion.hidden = ofertas.length === 0;
+  }
+
+  if (!ofertas.length) return;
+
+  elegirBloqueRotativo(ofertas, MAX_HOME_ITEMS, { modo: 'hora', clave: 'ofertas' }).forEach((p) => {
     const nombre = String(p.nombre || '').trim();
     const precio = numberValue(p.precio);
     const oferta = numberValue(p.oferta);
@@ -171,8 +192,8 @@ function renderOfertas(lista) {
       <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
       <div class="precio">
-        <span style="text-decoration:line-through;color:#bbb;">S/. ${precio.toFixed(2)}</span><br>
-        <span class="precio-oferta">S/. ${precioFinal.toFixed(2)}</span>
+        <span style="text-decoration:line-through;color:#bbb;">$ ${precio.toFixed(2)}</span><br>
+        <span class="precio-oferta">$ ${precioFinal.toFixed(2)}</span>
       </div>
       <div class="estado ${estadoClass(estadoTexto)}">${estadoTexto}</div>
       <a href="${whatsappLink(mensaje)}"
@@ -187,9 +208,25 @@ function renderOfertas(lista) {
 function renderPreventasHome(lista) {
   const cont = $('#productos-preventa');
   if (!cont) return;
+
+  const seccion = cont.closest('.seccion-preventas');
   cont.innerHTML = '';
 
-  elegirBloqueRotativo(lista, MAX_HOME_ITEMS, { modo: 'hora', clave: 'preventas' }).forEach((p) => {
+  const preventas = Array.isArray(lista)
+    ? lista.filter(p =>
+        String(p.estado || '')
+          .toUpperCase()
+          .includes('PREVENTA')
+      )
+    : [];
+
+  if (seccion) {
+    seccion.hidden = preventas.length === 0;
+  }
+
+  if (!preventas.length) return;
+
+  elegirBloqueRotativo(preventas, MAX_HOME_ITEMS, { modo: 'hora', clave: 'preventas' }).forEach((p) => {
     const nombre = String(p.nombre || p.descripcion || 'Preventa Dale Start').trim();
     const img = String(p.imagen || '').trim() || 'https://via.placeholder.com/300x300?text=Sin+imagen';
     const precio = numberValue(p.precio);
@@ -200,7 +237,7 @@ function renderPreventasHome(lista) {
     div.innerHTML = `
       <img src="${escapeHtml(img)}" alt="${escapeHtml(nombre)}" class="img" loading="lazy" referrerpolicy="no-referrer">
       <div class="nombre">${escapeHtml(nombre)}</div>
-      <div class="precio">S/. ${precio.toFixed(2)}</div>
+      <div class="precio">$ ${precio.toFixed(2)}</div>
       <div class="estado estado-preventa">Llega: ${escapeHtml(llegada)}</div>
       <a href="${whatsappLink(`Hola, quiero reservar esta preventa con S/ 15: ${nombre}`)}"
          target="_blank"
@@ -249,6 +286,7 @@ function renderPedidosHome(lista) {
   });
 }
 
+
 async function loadHome() {
   try {
     const data = await fetchJSON('homeData', {
@@ -257,12 +295,36 @@ async function loadHome() {
       timeoutMs: 12000
     });
 
-    if (!data?.ok) throw new Error(data?.error || 'home_data_unavailable');
+    if (!data?.ok) {
+      throw new Error(data?.error || 'home_data_unavailable');
+    }
+
     renderHome(data);
+
   } catch (error) {
     console.error('Error cargando portada:', error);
+
+    const cont = document.getElementById('ultimas-importaciones');
+
+    if (cont) {
+      cont.innerHTML = `
+        <div class="home-section-status is-error">
+          No pudimos cargar los productos en este momento.
+          <br>
+          <button type="button" id="reintentar-home" class="boton">
+            Reintentar
+          </button>
+        </div>
+      `;
+
+      document.getElementById('reintentar-home')
+        ?.addEventListener('click', () => {
+          location.reload();
+        });
+    }
   }
 }
+
 
 function renderHome(data) {
   const productosOrdenados = [...(data.productos || [])].sort((a, b) => Number(b.id ?? 0) - Number(a.id ?? 0));

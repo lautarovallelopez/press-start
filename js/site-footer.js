@@ -133,7 +133,6 @@ function renderSiteFooter() {
         <h2 id="footer-brand-title">Dale Start</h2>
         <ul class="mardant-footer__meta">
           <li>WhatsApp: <a href="https://wa.me/5491139473925" target="_blank" rel="noopener noreferrer">+54 9 11-3947-3925</a></li>
-          <li>Correo: <a href="mailto:dalestart@gmail.com">dalestart@gmail.com</a></li>
           <li>Ubicación: Buenos Aires, Argentina</li>
         </ul>
       </section>

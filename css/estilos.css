@@ -612,3 +612,92 @@ h2{ font-size: clamp(22px, 3.0vw, 32px); }
   white-space:nowrap;
   border:0;
 }
+
+
+.precio-original {
+  color: #aaa;
+  text-decoration: line-through;
+  margin-right: 10px;
+  font-weight: 400;
+}
+
+.precio-descuento {
+  color: #66bb6a;
+  font-weight: 900;
+}
+
+.etiqueta-descuento {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 3px 7px;
+  background: #2e7d32;
+  color: white;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+
+/* ===== CANTIDADES DEL CARRITO ===== */
+
+.cantidad-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.cantidad-control button {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #f4d06f;
+  background: #171411;
+  color: #f4d06f;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.cantidad-control button:hover {
+  background: #a8322a;
+  color: white;
+}
+
+.cantidad-numero {
+  min-width: 25px;
+  text-align: center;
+  color: white;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.carrito-subtotal {
+  font-size: 14px;
+  font-weight: 800;
+  color: #f4d06f;
+  margin-top: 8px;
+}
+
+.carrito-vacio {
+  padding: 40px 20px;
+  text-align: center;
+  color: #eee;
+}
+
+.carrito-vacio h2 {
+  color: #f4d06f;
+  margin-bottom: 12px;
+}
+
+.carrito-vacio .boton {
+  display: inline-block;
+  width: auto;
+  margin-top: 15px;
+  text-decoration: none;
+}
+
+/* Respetar el atributo hidden */
+#finalizar-compra[hidden] {
+  display: none !important;
+}

@@ -34,11 +34,16 @@ export function actualizarCarritoUI() {
   contador.style.display = carrito.length ? 'inline-block' : 'none';
 }
 
+
+
 export function mostrarMiniCarrito() {
-  const mini     = document.getElementById('mini-carrito');
+  const mini = document.getElementById('mini-carrito');
   if (!mini) return;
 
-  const carrito  = JSON.parse(localStorage.getItem(CARRITO_LOCAL_KEY) || '[]');
+  const carrito = JSON.parse(
+    localStorage.getItem(CARRITO_LOCAL_KEY) || '[]'
+  );
+
   mini.innerHTML = '';
 
   if (!carrito.length) {
@@ -46,45 +51,99 @@ export function mostrarMiniCarrito() {
     return;
   }
 
-  /* agrupamos para mostrar cantidad × producto */
-  const grup = {};
-  carrito.forEach((i) => (grup[i.nombre] = (grup[i.nombre] || 0) + 1));
+  const cantidad = carrito.length;
+  const tieneDescuento = cantidad >= 3;
+  const factor = tieneDescuento ? 0.85 : 1;
 
-  Object.entries(grup).forEach(([nombre, cant]) => {
-    const item = carrito.find((p) => p.nombre === nombre);
-    const div  = document.createElement('div');
+  // Agrupar productos iguales
+  const grupos = new Map();
+
+  carrito.forEach(item => {
+    const key = item.id
+      ? `id:${item.id}`
+      : `nombre:${item.nombre}`;
+
+    if (!grupos.has(key)) {
+      grupos.set(key, { ...item, cantidad: 0 });
+    }
+
+    grupos.get(key).cantidad++;
+  });
+
+  grupos.forEach(item => {
+    const div = document.createElement('div');
     div.className = 'mini-carrito-item';
 
     const img = document.createElement('img');
     img.src = item.imagen;
-    img.alt = nombre;
+    img.alt = item.nombre;
     img.referrerPolicy = 'no-referrer';
 
     const info = document.createElement('div');
     info.className = 'info';
-    info.append(document.createTextNode(nombre), document.createElement('br'));
 
-    const strong = document.createElement('strong');
-    strong.textContent = `S/. ${Number(item.precio || 0).toFixed(2)} x ${cant}`;
-    info.appendChild(strong);
+    const nombre = document.createElement('div');
+    nombre.textContent = item.nombre;
+    info.appendChild(nombre);
+
+    const precioOriginal = Number(item.precio) || 0;
+    const precioFinal = precioOriginal * factor;
+
+    if (tieneDescuento) {
+      const anterior = document.createElement('del');
+      anterior.textContent = `$ ${precioOriginal.toFixed(2)}`;
+      anterior.style.color = '#aaa';
+      anterior.style.marginRight = '8px';
+
+      info.appendChild(anterior);
+    }
+
+    const precio = document.createElement('strong');
+    precio.textContent = `$ ${precioFinal.toFixed(2)} x ${item.cantidad}`;
+    precio.style.color = tieneDescuento ? '#66bb6a' : '#fff';
+
+    info.appendChild(precio);
 
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.setAttribute('aria-label', 'Eliminar producto del carrito');
     btn.textContent = 'x';
-    btn.addEventListener('click', () => eliminarProductoMini(nombre));
+    btn.addEventListener('click', () => eliminarProductoMini(item.nombre));
 
     div.append(img, info, btn);
     mini.appendChild(div);
   });
 
-  /* total opcional (no imprescindible) */
-  const total = carrito.reduce((s, p) => s + p.precio, 0);
-  const tot   = document.createElement('div');
-  tot.style   = 'color:#fff;text-align:right;margin-top:10px;font-weight:bold;';
-  tot.textContent = `🧾 Total: S/. ${total.toFixed(2)}`;
+  const totalOriginal = carrito.reduce(
+    (s, p) => s + (Number(p.precio) || 0), 0
+  );
+
+  const totalFinal = totalOriginal * factor;
+
+  const tot = document.createElement('div');
+  tot.style.cssText =
+    'color:#fff;text-align:right;margin-top:10px;font-weight:bold;';
+
+  if (tieneDescuento) {
+    tot.innerHTML = `
+      <div style="color:#aaa;text-decoration:line-through;">
+        $ ${totalOriginal.toFixed(2)}
+      </div>
+      <div style="color:#66bb6a;">
+        Total 15% OFF: $ ${totalFinal.toFixed(2)}
+      </div>
+      <small style="color:#66bb6a;">
+        Ahorrás $ ${(totalOriginal - totalFinal).toFixed(2)}
+      </small>
+    `;
+  } else {
+    tot.textContent = `Total: $ ${totalOriginal.toFixed(2)}`;
+  }
+
   mini.appendChild(tot);
 }
+
+
 
 /* ====== API PRIVADA (helpers internos) ====== */
 export function notificar(mensaje, tipo = 'success') {

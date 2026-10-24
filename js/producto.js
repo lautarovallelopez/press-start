@@ -138,9 +138,9 @@ function renderProducto(p){
   // Precio
   const precioEl = $('#pdp-precio');
   if (!estaAgotado && tieneOferta){
-    precioEl.innerHTML = `<span class="pdp-old">S/. ${precioNum.toFixed(2)}</span> <span class="pdp-new">S/. ${precioFinal.toFixed(2)}</span>`;
+    precioEl.innerHTML = `<span class="pdp-old">$ ${precioNum.toFixed(2)}</span> <span class="pdp-new">$ ${precioFinal.toFixed(2)}</span>`;
   } else {
-    precioEl.textContent = `S/. ${precioFinal.toFixed(2)}`;
+    precioEl.textContent = `$ ${precioFinal.toFixed(2)}`;
   }
 
   // Botón carrito
@@ -178,7 +178,7 @@ function renderProducto(p){
     '¡Hola! Quiero este producto:',
     `• ${nombre}`,
     id ? `• ID: ${id}` : null,
-    `• Precio: S/. ${precioFinal.toFixed(2)}`,
+    `• Precio: $ ${precioFinal.toFixed(2)}`,
     `• Link: ${location.href}`
   ].filter(Boolean).join('\n');
 
