@@ -219,6 +219,99 @@
       font-size:36px; line-height:1; cursor:pointer; opacity:.9;
     }
     .lb-close:hover{ opacity:1; }
+
+
+/* ===== CARGA DE PREVENTAS ===== */
+
+.preventa-loading {
+  grid-column: 1 / -1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 45px 20px;
+  background: #171411;
+  border: 1px solid rgba(244,208,111,.25);
+  border-radius: 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.preventa-spinner {
+  width: 64px;
+  height: 64px;
+  box-sizing: content-box;
+  margin: 0 auto 22px;
+  border: 5px solid rgba(244,208,111,.15);
+  border-top-color: #f4d06f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: preventa-spin 1.2s linear infinite;
+}
+
+.preventa-spinner span {
+  color: #f4d06f;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.preventa-loading h3 {
+  color: #f4d06f;
+  font-size: 21px;
+  margin: 0 0 10px;
+}
+
+.preventa-loading p {
+  color: #ddd1c3;
+  font-size: 14px;
+  margin: 0;
+}
+
+.preventa-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.preventa-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a8322a;
+  animation: preventa-pulse 1.2s infinite ease-in-out;
+}
+
+.preventa-dots span:nth-child(2) {
+  animation-delay: .2s;
+}
+
+.preventa-dots span:nth-child(3) {
+  animation-delay: .4s;
+}
+
+@keyframes preventa-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes preventa-pulse {
+  0%, 60%, 100% {
+    opacity: .3;
+    transform: scale(.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preventa-spinner,
+  .preventa-dots span {
+    animation: none;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -245,9 +338,24 @@
   </div>
 
   <!-- Contenedor de productos -->
-  <div id="contenedor" class="grid-preventa">
-    <p style="text-align:center;width:100%;">Cargando productos…</p>
+  
+<div id="contenedor" class="grid-preventa">
+  <div class="preventa-loading" role="status" aria-live="polite">
+    <div class="preventa-spinner">
+      <span>DS</span>
+    </div>
+
+    <h3>Cargando preventas...</h3>
+    <p>Estamos buscando las próximas novedades para vos.</p>
+
+    <div class="preventa-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
+</div>
+
   <div id="paginacion" class="paginacion catalog-pagination" aria-label="Paginas de preventas"></div>
 
   <!-- Carrito flotante -->
@@ -263,7 +371,7 @@
   </div>
 
   <!-- Lógica de la página -->
-  <script type="module" src="../js/preventa.js?v=12"></script>
+  <script type="module" src="../js/preventa.js?v=13"></script>
 
   <!-- Lightbox: abrir al tocar cualquier imagen -->
   <script>
