@@ -9,7 +9,7 @@
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="../css/estilos.css?v=18">
+  <link rel="stylesheet" href="../css/estilos.css?v=19">
 </head>
 <body>
   <div class="carrito-container">
@@ -70,85 +70,190 @@
     }
 
 
-    function renderCarrito() {
-      const carritoLocal = JSON.parse(
-        localStorage.getItem('carritoMardant') || '[]'
-      );
+function agruparCarrito(items) {
+  const grupos = new Map();
 
-      contenedor.innerHTML = '';
+  items.forEach(item => {
+    const id = String(item.id ?? '').trim();
+    const key = id
+      ? `id:${id}`
+      : `nombre:${item.nombre}`;
 
-      const cantidad = carritoLocal.length;
-      const tieneDescuento = cantidad >= MINIMO_PRODUCTOS;
-
-      const totalOriginal = carritoLocal.reduce(
-        (sum, item) => sum + Number(item.precio || 0), 0
-      );
-
-      const totalFinal = calcularPrecio(totalOriginal, cantidad);
-
-      carritoLocal.forEach((item, index) => {
-        const precioOriginal = Number(item.precio) || 0;
-        const precioFinal = calcularPrecio(precioOriginal, cantidad);
-
-        const div = document.createElement('div');
-        div.className = 'carrito-item';
-
-        div.innerHTML = `
-          <img src="${escapeHtml(item.imagen)}"
-              alt="${escapeHtml(item.nombre)}"
-              referrerpolicy="no-referrer">
-
-          <div class="carrito-info">
-            <div class="nombre">${escapeHtml(item.nombre)}</div>
-
-            <div class="precio">
-              ${tieneDescuento ? `
-                <del class="precio-original">
-                  $ ${precioOriginal.toFixed(2)}
-                </del>
-                <span class="precio-descuento">
-                  $ ${precioFinal.toFixed(2)}
-                </span>
-                <small class="etiqueta-descuento">15% OFF</small>
-              ` : `
-                $ ${precioOriginal.toFixed(2)}
-              `}
-            </div>
-          </div>
-
-          <button class="eliminar"
-                  data-index="${index}"
-                  aria-label="Eliminar producto del carrito">✕</button>
-        `;
-
-        contenedor.appendChild(div);
+    if (!grupos.has(key)) {
+      grupos.set(key, {
+        ...item,
+        key,
+        cantidad: 0
       });
-
-      totalSpan.innerHTML = tieneDescuento
-        ? `
-          <div>
-            <del class="precio-original">
-              $ ${totalOriginal.toFixed(2)}
-            </del>
-          </div>
-          <div>Total con 15% OFF: $ ${totalFinal.toFixed(2)}</div>
-          <small>Ahorrás $ ${(totalOriginal - totalFinal).toFixed(2)}</small>
-        `
-        : `Total: $ ${totalOriginal.toFixed(2)}`;
     }
 
+    grupos.get(key).cantidad++;
+  });
 
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('eliminar')) {
-        const index = Number(e.target.dataset.index);
-        const carritoLocal = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
-        carritoLocal.splice(index, 1);
-        localStorage.setItem('carritoMardant', JSON.stringify(carritoLocal));
+  return [...grupos.values()];
+}
 
-        renderCarrito();
-        actualizarCarritoUI();
-      }
-    });
+
+
+
+function renderCarrito() {
+  const carritoLocal = JSON.parse(
+    localStorage.getItem('carritoMardant') || '[]'
+  );
+
+  const grupos = agruparCarrito(carritoLocal);
+
+  const cantidadTotal = carritoLocal.length;
+  const tieneDescuento = cantidadTotal >= MINIMO_PRODUCTOS;
+
+  const totalOriginal = carritoLocal.reduce(
+    (sum, item) => sum + Number(item.precio || 0),
+    0
+  );
+
+  const totalFinal = calcularPrecio(totalOriginal, cantidadTotal);
+
+  contenedor.innerHTML = '';
+
+  if (!grupos.length) {
+    contenedor.innerHTML = `
+      <div class="carrito-vacio">
+        <h2>Tu carrito está vacío</h2>
+        <p>¡Explorá nuestros productos y elegí tus favoritos!</p>
+        <a href="./catalogo.html" class="boton">
+          Explorar catálogo
+        </a>
+      </div>
+    `;
+
+    totalSpan.textContent = 'Total: $ 0.00';
+    document.getElementById('finalizar-compra').hidden = true;
+    return;
+  }
+
+  document.getElementById('finalizar-compra').hidden = false;
+
+  grupos.forEach(item => {
+    const precioOriginal = Number(item.precio) || 0;
+    const precioFinal = calcularPrecio(
+      precioOriginal,
+      cantidadTotal
+    );
+
+    const subtotal = precioFinal * item.cantidad;
+
+    const div = document.createElement('div');
+    div.className = 'carrito-item';
+
+    div.innerHTML = `
+      <img src="${escapeHtml(item.imagen)}"
+           alt="${escapeHtml(item.nombre)}"
+           referrerpolicy="no-referrer">
+
+      <div class="carrito-info">
+        <div class="nombre">${escapeHtml(item.nombre)}</div>
+
+        <div class="precio">
+          ${tieneDescuento ? `
+            <del class="precio-original">
+              $ ${precioOriginal.toFixed(2)}
+            </del>
+            <span class="precio-descuento">
+              $ ${precioFinal.toFixed(2)}
+            </span>
+            <small class="etiqueta-descuento">15% OFF</small>
+          ` : `
+            $ ${precioOriginal.toFixed(2)}
+          `}
+        </div>
+
+        <div class="cantidad-control">
+          <button class="cantidad-menos"
+                  type="button"
+                  aria-label="Quitar una unidad">−</button>
+
+          <span class="cantidad-numero">
+            ${item.cantidad}
+          </span>
+
+          <button class="cantidad-mas"
+                  type="button"
+                  aria-label="Agregar una unidad">+</button>
+        </div>
+
+        <div class="carrito-subtotal">
+          Subtotal: $ ${subtotal.toFixed(2)}
+        </div>
+      </div>
+    `;
+
+    div.querySelector('.cantidad-menos').addEventListener(
+      'click',
+      () => cambiarCantidad(item.key, -1)
+    );
+
+    div.querySelector('.cantidad-mas').addEventListener(
+      'click',
+      () => cambiarCantidad(item.key, 1)
+    );
+
+    contenedor.appendChild(div);
+  });
+
+  totalSpan.innerHTML = tieneDescuento
+    ? `
+      <div>
+        <del class="precio-original">
+          $ ${totalOriginal.toFixed(2)}
+        </del>
+      </div>
+      <div>Total con 15% OFF: $ ${totalFinal.toFixed(2)}</div>
+      <small>
+        Ahorrás $ ${(totalOriginal - totalFinal).toFixed(2)}
+      </small>
+    `
+    : `Total: $ ${totalOriginal.toFixed(2)}`;
+}
+
+
+
+function cambiarCantidad(key, cambio) {
+  const carritoLocal = JSON.parse(
+    localStorage.getItem('carritoMardant') || '[]'
+  );
+
+  const obtenerKey = item => {
+    const id = String(item.id ?? '').trim();
+    return id
+      ? `id:${id}`
+      : `nombre:${item.nombre}`;
+  };
+
+  const index = carritoLocal.findIndex(
+    item => obtenerKey(item) === key
+  );
+
+  if (index === -1) return;
+
+  if (cambio > 0) {
+    // Agregar una unidad igual
+    carritoLocal.push({ ...carritoLocal[index] });
+  } else if (cambio < 0) {
+    // Quitar solamente una unidad
+    carritoLocal.splice(index, 1);
+  }
+
+  localStorage.setItem(
+    'carritoMardant',
+    JSON.stringify(carritoLocal)
+  );
+
+  renderCarrito();
+  actualizarCarritoUI();
+}
+
+
+   
 
     document.getElementById('finalizar-compra').addEventListener('click', (e) => {
       e.preventDefault();
