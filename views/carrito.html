@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Carrito - Dale Start</title>
   <!-- favicon -->
-  <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
   <link rel="stylesheet" href="../css/estilos.css?v=20">
 </head>
@@ -31,6 +31,7 @@
   obtenerStock
 } from '../js/carrito-utils.js?v=3';
     import { whatsappLink } from '../js/config.js';
+    import { fetchRoute } from '../js/api-client.js?v=7';
 
     const contenedor = document.getElementById('lista-carrito');
     const totalSpan = document.getElementById('total-carrito');
@@ -96,6 +97,51 @@ function agruparCarrito(items) {
   return [...grupos.values()];
 }
 
+
+async function validarPedidoStock(pedidoId, cart) {
+  const grupos = agruparCarrito(cart);
+
+  if (!grupos.length) {
+    throw new Error('El carrito está vacío.');
+  }
+
+  const productos = grupos.map(item => ({
+    id: String(item.id ?? '').trim(),
+    cantidad: item.cantidad
+  }));
+
+  if (productos.some(p => !p.id)) {
+    throw new Error(
+      'Hay productos sin ID. Volvé a agregarlos desde el catálogo.'
+    );
+  }
+
+  const respuesta = await fetchRoute(
+    'validarStockCarrito',
+    {
+      pedidoId,
+      productos
+    },
+    {
+      timeoutMs: 15000
+    }
+  );
+
+  if (!respuesta || respuesta.ok !== true) {
+    throw new Error(
+      respuesta?.error || 'No se pudo validar el pedido.'
+    );
+  }
+
+  if (
+    typeof respuesta.stockSuficiente !== 'boolean' ||
+    !Array.isArray(respuesta.problemas)
+  ) {
+    throw new Error('Respuesta inválida de Apps Script.');
+  }
+
+  return respuesta;
+}
 
 
 
