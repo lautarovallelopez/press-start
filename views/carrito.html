@@ -9,7 +9,7 @@
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="../css/estilos.css?v=19">
+  <link rel="stylesheet" href="../css/estilos.css?v=20">
 </head>
 <body>
   <div class="carrito-container">
@@ -26,7 +26,10 @@
   </div>
 
   <script type="module">
-    import { actualizarCarritoUI } from '../js/carrito-utils.js?v=2';
+    import {
+  actualizarCarritoUI,
+  obtenerStock
+} from '../js/carrito-utils.js?v=3';
     import { whatsappLink } from '../js/config.js';
 
     const contenedor = document.getElementById('lista-carrito');
@@ -142,6 +145,13 @@ function renderCarrito() {
 
     const subtotal = precioFinal * item.cantidad;
 
+const stockMaximo = obtenerStock(item);
+
+const limiteAlcanzado =
+  stockMaximo === null ||
+  item.cantidad >= stockMaximo;
+
+
     const div = document.createElement('div');
     div.className = 'carrito-item';
 
@@ -176,9 +186,17 @@ function renderCarrito() {
             ${item.cantidad}
           </span>
 
-          <button class="cantidad-mas"
-                  type="button"
-                  aria-label="Agregar una unidad">+</button>
+          
+<button class="cantidad-mas"
+        type="button"
+        aria-label="Agregar una unidad"
+        ${limiteAlcanzado ? 'disabled' : ''}
+        title="${limiteAlcanzado
+          ? 'Stock máximo alcanzado'
+          : 'Agregar una unidad'}">
+  +
+</button>
+
         </div>
 
         <div class="carrito-subtotal">
@@ -198,6 +216,10 @@ function renderCarrito() {
     );
 
     contenedor.appendChild(div);
+
+
+
+
   });
 
   totalSpan.innerHTML = tieneDescuento
@@ -235,10 +257,23 @@ function cambiarCantidad(key, cambio) {
 
   if (index === -1) return;
 
-  if (cambio > 0) {
-    // Agregar una unidad igual
-    carritoLocal.push({ ...carritoLocal[index] });
-  } else if (cambio < 0) {
+  
+if (cambio > 0) {
+  const producto = carritoLocal[index];
+  const stockMaximo = obtenerStock(producto);
+
+  const cantidadActual = carritoLocal.filter(
+    item => obtenerKey(item) === key
+  ).length;
+
+  if (stockMaximo === null ||
+      cantidadActual >= stockMaximo) {
+    return;
+  }
+
+  carritoLocal.push({ ...producto });
+}
+ else if (cambio < 0) {
     // Quitar solamente una unidad
     carritoLocal.splice(index, 1);
   }

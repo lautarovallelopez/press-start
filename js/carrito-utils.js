@@ -3,9 +3,55 @@ import { CARRITO_LOCAL_KEY } from './config.js?v=5';
  * js/carrito-utils.js — utilidades compartidas (inicio + catálogo)
  * ---------------------------------------------------------- */
 
+export function obtenerStock(prod) {
+  if (prod.stock === null ||
+      prod.stock === undefined ||
+      prod.stock === '') return null;
+
+  const stock = Number(prod.stock);
+
+  return Number.isInteger(stock) && stock >= 0
+    ? stock
+    : null;
+}
+
+export function cantidadEnCarrito(prod) {
+  const carrito = JSON.parse(
+    localStorage.getItem(CARRITO_LOCAL_KEY) || '[]'
+  );
+
+  const id = String(prod.id ?? '').trim();
+
+  return carrito.filter(item =>
+    id
+      ? String(item.id ?? '').trim() === id
+      : !String(item.id ?? '').trim() &&
+        item.nombre === prod.nombre
+  ).length;
+}
+
 /* ====== API PÚBLICA (exportada) ====== */
 export function agregarAlCarrito(prod) {
   const carrito = JSON.parse(localStorage.getItem(CARRITO_LOCAL_KEY) || '[]');
+
+const stock = obtenerStock(prod);
+const cantidadActual = cantidadEnCarrito(prod);
+
+if (stock === null) {
+  notificar('No pudimos verificar el stock disponible.', 'warning');
+  return false;
+}
+
+if (cantidadActual >= stock) {
+  notificar(
+    stock === 0
+      ? 'Este producto está agotado.'
+      : `Solo hay ${stock} unidades disponibles.`,
+    'warning'
+  );
+  return false;
+}
+
 
   const oferta = Number(prod.oferta);
   const precioBase = Number(prod.precio);
@@ -28,11 +74,13 @@ const precioUnit =
     nombre: String(prod.nombre || '').trim(),
     precio: precioUnit,
     imagen: prod.imagen || 'https://via.placeholder.com/300x300?text=Sin+imagen',
+    stock: stock,
   });
 
   localStorage.setItem(CARRITO_LOCAL_KEY, JSON.stringify(carrito));
   actualizarCarritoUI();
   notificar('✅ Producto añadido al carrito', 'success'); // (tu noti ya existe)
+  return true;
 }
 
 export function actualizarCarritoUI() {
