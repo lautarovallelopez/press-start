@@ -382,7 +382,8 @@ const limiteAlcanzado =
         <div class="cantidad-control">
           <button class="cantidad-menos"
                   type="button"
-                  aria-label="Quitar una unidad">−</button>
+                  aria-label="Quitar una unidad"
+                  ${validandoPedido ? 'disabled' : ''}>−</button>
 
           <span class="cantidad-numero">
             ${item.cantidad}
@@ -395,7 +396,8 @@ const limiteAlcanzado =
         ${limiteAlcanzado ? 'disabled' : ''}
         title="${limiteAlcanzado
           ? 'Stock máximo alcanzado'
-          : 'Agregar una unidad'}">
+          : 'Agregar una unidad'}"
+          ${limiteAlcanzado || validandoPedido ? 'disabled' : ''}>
   +
 </button>
 
@@ -442,6 +444,7 @@ const limiteAlcanzado =
 
 
 function cambiarCantidad(key, cambio) {
+  if (validandoPedido) return;
   const carritoLocal = JSON.parse(
     localStorage.getItem('carritoMardant') || '[]'
   );
@@ -521,6 +524,7 @@ const firmaInicial = JSON.stringify(
 validandoPedido = true;
 boton.classList.add('validando');
 boton.textContent = '⏳ Verificando disponibilidad...';
+renderCarrito();
 
 document.getElementById('problemas-stock').innerHTML = '';
 
@@ -663,6 +667,7 @@ try {
   validandoPedido = false;
   boton.classList.remove('validando');
   boton.textContent = '✅ Finalizar compra por WhatsApp';
+  renderCarrito();
 }
 
 
