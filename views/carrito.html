@@ -492,13 +492,85 @@ if (cambio > 0) {
 
    
 
-    document.getElementById('finalizar-compra').addEventListener('click', (e) => {
+    document.getElementById('finalizar-compra').addEventListener('click', async (e) => {
       e.preventDefault();
 
-      const cart = JSON.parse(localStorage.getItem('carritoMardant') || '[]');
-      const cantidad = cart.length;
-      const tieneDescuento = cantidad >= MINIMO_PRODUCTOS;
-      if (!cart.length) return;
+      
+if (validandoPedido) return;
+
+const cart = JSON.parse(
+  localStorage.getItem('carritoMardant') || '[]'
+);
+
+if (!cart.length) return;
+
+const cantidad = cart.length;
+const tieneDescuento = cantidad >= MINIMO_PRODUCTOS;
+
+const boton = document.getElementById('finalizar-compra');
+const pedidoId = obtenerPedidoId(cart);
+const firmaInicial = JSON.stringify(
+  agruparCarrito(cart)
+    .map(item => ({
+      id: String(item.id).trim(),
+      cantidad: item.cantidad
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id))
+);
+
+validandoPedido = true;
+boton.classList.add('validando');
+boton.textContent = '⏳ Verificando disponibilidad...';
+
+document.getElementById('problemas-stock').innerHTML = '';
+
+mostrarEstadoValidacion(
+  'Estamos verificando el stock de tu pedido...',
+  'info'
+);
+
+try {
+  const respuesta = await validarPedidoStock(pedidoId, cart);
+
+  if (!respuesta.stockSuficiente) {
+    mostrarEstadoValidacion(
+      'Algunos productos no tienen stock suficiente.',
+      'error'
+    );
+
+    mostrarProblemasStock(respuesta.problemas);
+    return;
+  }
+
+  const carritoActual = JSON.parse(
+    localStorage.getItem('carritoMardant') || '[]'
+  );
+
+  const firmaActual = JSON.stringify(
+    agruparCarrito(carritoActual)
+      .map(item => ({
+        id: String(item.id).trim(),
+        cantidad: item.cantidad
+      }))
+      .sort((a, b) => a.id.localeCompare(b.id))
+  );
+
+  if (firmaActual !== firmaInicial) {
+    mostrarEstadoValidacion(
+      'El stock ya fue descontado, pero el carrito cambió durante la validación. Revisá tu pedido antes de continuar.',
+      'error'
+    );
+    return;
+  }
+
+  mostrarEstadoValidacion(
+    '¡Stock confirmado! Tu pedido está listo para WhatsApp.',
+    'success'
+  );
+
+  // La validación fue exitosa.
+  // Aquí continúa el código actual del mensaje de WhatsApp.
+
 
       // Agrupar por id (si existe) o por nombre
       const groups = new Map();
@@ -576,7 +648,24 @@ if (cambio > 0) {
         value: total,
         items: trackingItems
       });
-      window.open(wa, '_blank', 'noopener,noreferrer');
+      window.location.assign(wa);
+
+} catch (error) {
+  console.error('Error validando pedido:', error);
+
+  mostrarEstadoValidacion(
+    error.message ||
+      'No pudimos comprobar el stock. Intentá nuevamente.',
+    'error'
+  );
+
+} finally {
+  validandoPedido = false;
+  boton.classList.remove('validando');
+  boton.textContent = '✅ Finalizar compra por WhatsApp';
+}
+
+
     });
 
     renderCarrito();
