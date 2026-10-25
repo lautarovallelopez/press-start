@@ -754,3 +754,51 @@ h2{ font-size: clamp(22px, 3.0vw, 32px); }
   cursor: wait;
 }
 
+
+/* Problemas de stock del carrito */
+
+#problemas-stock:not(:empty) {
+  margin: 20px 0;
+  padding: 20px;
+  background: #251918;
+  border: 1px solid #a8322a;
+  border-radius: 14px;
+  color: #fff;
+}
+
+#problemas-stock h3 {
+  color: #ff9d92;
+  margin: 0 0 12px;
+}
+
+#problemas-stock p {
+  color: #ddd1c3;
+  line-height: 1.5;
+}
+
+.problema-stock-item {
+  background: #332522;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.problema-stock-item strong {
+  color: #f4d06f;
+}
+
+.problema-stock-item button {
+  margin: 8px 8px 0 0;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #a8322a;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.problema-stock-item button:hover {
+  background: #c04438;
+}
+

@@ -9,7 +9,7 @@
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="../css/estilos.css?v=21">
+  <link rel="stylesheet" href="../css/estilos.css?v=22">
 </head>
 <body>
   <div class="carrito-container">
@@ -18,6 +18,7 @@
     <div class="total" id="total-carrito">Total: $ 0.00</div>
 
     <div id="estado-validacion" role="status" aria-live="polite"></div>
+    <div id="problemas-stock" aria-live="polite"></div>
 
     <div class="finalizar">
       <a href="#" id="finalizar-compra" class="boton">✅ Finalizar compra por WhatsApp</a>
@@ -89,6 +90,106 @@ function limpiarEstadoValidacion() {
   cont.textContent = '';
   cont.className = '';
 }
+
+
+function mostrarProblemasStock(problemas) {
+  const cont = document.getElementById('problemas-stock');
+  cont.innerHTML = '';
+
+  const titulo = document.createElement('h3');
+  titulo.textContent = '⚠️ Hay productos que necesitan revisión';
+
+  const descripcion = document.createElement('p');
+  descripcion.textContent =
+    'Corregí las cantidades para poder continuar con tu compra.';
+
+  cont.append(titulo, descripcion);
+
+  const carrito = JSON.parse(
+    localStorage.getItem('carritoMardant') || '[]'
+  );
+
+  for (const problema of problemas) {
+    const id = String(problema.id);
+
+    const producto = carrito.find(
+      p => String(p.id).trim() === id
+    );
+
+    const fila = document.createElement('div');
+    fila.className = 'problema-stock-item';
+
+    const nombre = document.createElement('strong');
+    nombre.textContent = producto?.nombre || `Producto ID ${id}`;
+
+    const detalle = document.createElement('p');
+
+    const disponible = problema.disponible;
+
+    detalle.textContent = disponible === null
+      ? 'No pudimos verificar la disponibilidad.'
+      : `Solicitaste ${problema.solicitado}. Disponibles: ${disponible}.`;
+
+    fila.append(nombre, detalle);
+
+    function actualizarCarrito(cantidadNueva) {
+      const actual = JSON.parse(
+        localStorage.getItem('carritoMardant') || '[]'
+      );
+
+      const iguales = actual.filter(
+        p => String(p.id).trim() === id
+      );
+
+      const otros = actual.filter(
+        p => String(p.id).trim() !== id
+      );
+
+      const ajustados = iguales
+        .slice(0, cantidadNueva)
+        .map(p => ({
+          ...p,
+          stock: disponible
+        }));
+
+      localStorage.setItem(
+        'carritoMardant',
+        JSON.stringify([...otros, ...ajustados])
+      );
+
+      invalidarPedidoPendiente();
+      limpiarEstadoValidacion();
+      cont.innerHTML = '';
+
+      renderCarrito();
+      actualizarCarritoUI();
+    }
+
+    if (Number.isInteger(disponible) && disponible > 0) {
+      const ajustar = document.createElement('button');
+      ajustar.type = 'button';
+      ajustar.textContent = `Ajustar a ${disponible}`;
+
+      ajustar.onclick = () => {
+        actualizarCarrito(disponible);
+      };
+
+      fila.appendChild(ajustar);
+    }
+
+    const eliminar = document.createElement('button');
+    eliminar.type = 'button';
+    eliminar.textContent = 'Eliminar producto';
+
+    eliminar.onclick = () => {
+      actualizarCarrito(0);
+    };
+
+    fila.appendChild(eliminar);
+    cont.appendChild(fila);
+  }
+}
+
 
 
     function waCleanText(str){
