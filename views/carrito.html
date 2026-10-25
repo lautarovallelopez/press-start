@@ -9,13 +9,16 @@
   <!-- favicon -->
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="../css/estilos.css?v=20">
+  <link rel="stylesheet" href="../css/estilos.css?v=21">
 </head>
 <body>
   <div class="carrito-container">
     <h1>🛒 Mi Carrito</h1>
     <div id="lista-carrito"></div>
     <div class="total" id="total-carrito">Total: $ 0.00</div>
+
+    <div id="estado-validacion" role="status" aria-live="polite"></div>
+
     <div class="finalizar">
       <a href="#" id="finalizar-compra" class="boton">✅ Finalizar compra por WhatsApp</a>
     </div>
@@ -35,6 +38,58 @@
 
     const contenedor = document.getElementById('lista-carrito');
     const totalSpan = document.getElementById('total-carrito');
+
+
+const PEDIDO_PENDIENTE_KEY = 'daleStartPedidoPendiente';
+
+let validandoPedido = false;
+
+function obtenerPedidoId(cart) {
+  const productos = agruparCarrito(cart)
+    .map(item => ({
+      id: String(item.id).trim(),
+      cantidad: item.cantidad
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id));
+
+  const firma = JSON.stringify(productos);
+
+  const guardado = JSON.parse(
+    localStorage.getItem(PEDIDO_PENDIENTE_KEY) || 'null'
+  );
+
+  if (guardado && guardado.firma === firma) {
+    return guardado.pedidoId;
+  }
+
+  const pedidoId = crypto.randomUUID();
+
+  localStorage.setItem(
+    PEDIDO_PENDIENTE_KEY,
+    JSON.stringify({ pedidoId, firma })
+  );
+
+  return pedidoId;
+}
+
+function invalidarPedidoPendiente() {
+  localStorage.removeItem(PEDIDO_PENDIENTE_KEY);
+}
+
+function mostrarEstadoValidacion(mensaje, tipo = 'info') {
+  const cont = document.getElementById('estado-validacion');
+
+  cont.textContent = mensaje;
+  cont.className = `estado-validacion ${tipo}`;
+}
+
+function limpiarEstadoValidacion() {
+  const cont = document.getElementById('estado-validacion');
+
+  cont.textContent = '';
+  cont.className = '';
+}
+
 
     function waCleanText(str){
       // Quita caracteres invisibles/problemáticos
